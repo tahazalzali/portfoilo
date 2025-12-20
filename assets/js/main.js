@@ -190,39 +190,43 @@
   /**
    * Testimonials slider
    */
-  new Swiper('.testimonials-slider', {
-    speed: 600,
-    loop: true,
-    grabCursor: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    slidesPerView: 'auto',
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
-  });
+  if (typeof Swiper !== 'undefined' && document.querySelector('.testimonials-slider')) {
+    new Swiper('.testimonials-slider', {
+      speed: 600,
+      loop: true,
+      grabCursor: true,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false
+      },
+      slidesPerView: 'auto',
+      pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+        clickable: true
+      }
+    });
+  }
 
   /**
    * Portfolio details slider
    */
-  new Swiper('.portfolio-details-slider', {
-    speed: 400,
-    loop: true,
-    grabCursor: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      type: 'bullets',
-      clickable: true
-    }
-  });
+  if (typeof Swiper !== 'undefined' && document.querySelector('.portfolio-details-slider')) {
+    new Swiper('.portfolio-details-slider', {
+      speed: 400,
+      loop: true,
+      grabCursor: true,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+        clickable: true
+      }
+    });
+  }
 
   /**
    * Preloader
@@ -246,6 +250,16 @@
       offset: 50
     })
   });
+
+  /**
+   * Bootstrap tooltips (no jQuery)
+   */
+  if (window.bootstrap) {
+    const tooltipTriggers = document.querySelectorAll('[data-toggle="tooltip"], [data-bs-toggle="tooltip"]');
+    tooltipTriggers.forEach(el => {
+      new bootstrap.Tooltip(el);
+    });
+  }
 
   /**
    * Particles.js
