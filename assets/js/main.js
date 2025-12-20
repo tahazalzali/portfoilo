@@ -37,7 +37,7 @@
    * Easy on scroll event listener 
    */
   const onscroll = (el, listener) => {
-    el.addEventListener('scroll', listener)
+    el.addEventListener('scroll', listener, { passive: true })
   }
 
   /**
@@ -389,6 +389,16 @@
   /**
    * Custom Cursor - Dev Power Follower & Particle System
    */
+  let isScrolling = false;
+  let scrollStopTimer;
+  window.addEventListener('scroll', () => {
+    isScrolling = true;
+    clearTimeout(scrollStopTimer);
+    scrollStopTimer = setTimeout(() => {
+      isScrolling = false;
+    }, 120);
+  }, { passive: true });
+
   const cursorFollower = document.createElement('div');
   cursorFollower.classList.add('cursor-follower');
   cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
@@ -465,36 +475,38 @@
     
     cursorFollower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%) scale(${scale})`;
     
-    // Canvas Render Loop
-    ctx.clearRect(0, 0, width, height);
-    
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update();
-      particles[i].draw();
+    if (!isScrolling) {
+      // Canvas Render Loop
+      ctx.clearRect(0, 0, width, height);
       
-      // Remove dead particles
-      if (particles[i].life <= 0) {
-        particles.splice(i, 1);
-        i--;
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+        
+        // Remove dead particles
+        if (particles[i].life <= 0) {
+          particles.splice(i, 1);
+          i--;
+        }
       }
-    }
-    
-    // Draw connecting lines (Constellation effect)
-    // Only connect if close to cursor
-    ctx.strokeStyle = 'rgba(77, 163, 255, 0.1)';
-    ctx.lineWidth = 0.5;
-    ctx.beginPath();
-    for (let i = 0; i < particles.length; i++) {
-      const dx = particles[i].x - followerX;
-      const dy = particles[i].y - followerY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
       
-      if (distance < 100) {
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(followerX, followerY);
+      // Draw connecting lines (Constellation effect)
+      // Only connect if close to cursor
+      ctx.strokeStyle = 'rgba(77, 163, 255, 0.1)';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      for (let i = 0; i < particles.length; i++) {
+        const dx = particles[i].x - followerX;
+        const dy = particles[i].y - followerY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 100) {
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(followerX, followerY);
+        }
       }
+      ctx.stroke();
     }
-    ctx.stroke();
 
     requestAnimationFrame(animateCursor);
   }
@@ -537,6 +549,10 @@
     }
 
     function drawBg() {
+      if (isScrolling) {
+        requestAnimationFrame(drawBg);
+        return;
+      }
       // Translucent black background to create trail effect
       bgCtx.fillStyle = 'rgba(17, 17, 17, 0.05)';
       bgCtx.fillRect(0, 0, bgWidth, bgHeight);
