@@ -364,30 +364,48 @@
   }
 
   /**
-   * Custom Cursor
+   * Custom Cursor - Dev Power Follower
    */
-  const cursor = document.querySelector('.cursor');
-  const cursor2 = document.querySelector('.cursor2');
+  const cursorFollower = document.createElement('div');
+  cursorFollower.classList.add('cursor-follower');
+  cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
+  document.body.appendChild(cursorFollower);
 
-  if (cursor && cursor2) {
-    document.addEventListener('mousemove', function(e) {
-      const x = e.clientX;
-      const y = e.clientY;
-      // Use transform for hardware accelerated movement
-      cursor.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-      cursor2.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-    });
+  let mouseX = 0;
+  let mouseY = 0;
+  let followerX = 0;
+  let followerY = 0;
+  let scale = 1;
 
-    // Add hover effect for links and buttons
-    const hoverElements = document.querySelectorAll('a, button, .work-box, .service-box, .card-blog');
-    hoverElements.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor2.classList.add('cursor-hover');
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor2.classList.remove('cursor-hover');
-      });
-    });
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function animateCursor() {
+    // Smooth lerp movement
+    followerX += (mouseX - followerX) * 0.15;
+    followerY += (mouseY - followerY) * 0.15;
+    
+    cursorFollower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%) scale(${scale})`;
+    
+    requestAnimationFrame(animateCursor);
   }
+  animateCursor();
+
+  // Hover effects
+  const hoverElements = document.querySelectorAll('a, button, .work-box, .service-box, .card-blog, input, textarea');
+  hoverElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      scale = 1.5;
+      cursorFollower.style.backgroundColor = 'rgba(77, 163, 255, 0.1)';
+      cursorFollower.style.borderColor = 'transparent';
+    });
+    el.addEventListener('mouseleave', () => {
+      scale = 1;
+      cursorFollower.style.backgroundColor = 'rgba(77, 163, 255, 0.15)';
+      cursorFollower.style.borderColor = 'rgba(77, 163, 255, 0.5)';
+    });
+  });
 
 })()
