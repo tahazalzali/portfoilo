@@ -451,3 +451,17 @@ footer {
     padding: 2rem 1rem;
   }
 }
+
+@media (max-width: 768px) {
+  .mobile-reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 500ms ease, transform 500ms ease;
+    will-change: opacity, transform;
+  }
+
+  .mobile-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

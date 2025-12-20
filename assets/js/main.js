@@ -252,6 +252,35 @@
   });
 
   /**
+   * Mobile scroll-reveal to match desktop motion
+   */
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  if (isMobile) {
+    const revealTargets = document.querySelectorAll(
+      '.box-shadow-full, .work-box, .project-card, .service-box, .title-box, .about-info, .about-me, .hero-title, .hero-subtitle'
+    );
+    revealTargets.forEach(el => el.classList.add('mobile-reveal'));
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        },
+        { rootMargin: '0px 0px -10% 0px', threshold: 0.1 }
+      );
+
+      revealTargets.forEach(el => observer.observe(el));
+    } else {
+      revealTargets.forEach(el => el.classList.add('is-visible'));
+    }
+  }
+
+  /**
    * Bootstrap tooltips (no jQuery)
    */
   if (window.bootstrap) {
