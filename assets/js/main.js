@@ -440,9 +440,11 @@
   }, { passive: true });
 
   if (!prefersReducedMotion && hasFinePointer) {
+    document.body.classList.add('has-custom-cursor');
     const cursorFollower = document.createElement('div');
     cursorFollower.classList.add('cursor-follower');
     cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
+    cursorFollower.style.opacity = '0';
     document.body.appendChild(cursorFollower);
 
     // Canvas for particle trail
@@ -468,6 +470,7 @@
     let followerX = 0;
     let followerY = 0;
     let scale = 1;
+    let hasMouseMoved = false;
     let cursorRafId = null;
     let lastCursorFrame = 0;
 
@@ -504,6 +507,10 @@
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      if (!hasMouseMoved) {
+        hasMouseMoved = true;
+        cursorFollower.style.opacity = '1';
+      }
       
       // Spawn particles on move
       if (Math.random() > 0.5 && particles.length < maxParticles) {

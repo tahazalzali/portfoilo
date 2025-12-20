@@ -281,11 +281,16 @@ html {
 }
 
 /* Custom Cursor */
-body {
+body.has-custom-cursor {
   cursor: none;
 }
 
-a, button, .work-box, .btn, input, textarea {
+body.has-custom-cursor a,
+body.has-custom-cursor button,
+body.has-custom-cursor .work-box,
+body.has-custom-cursor .btn,
+body.has-custom-cursor input,
+body.has-custom-cursor textarea {
   cursor: none;
 }
 
