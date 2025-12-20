@@ -168,9 +168,15 @@
     new Typed('.typed', {
       strings: typed_strings,
       loop: true,
-      typeSpeed: 100,
-      backSpeed: 50,
-      backDelay: 2000
+      typeSpeed: 40,
+      backSpeed: 20,
+      startDelay: 0,
+      backDelay: 2000,
+      smartBackspace: true,
+      showCursor: true,
+      cursorChar: '|',
+      autoInsertCss: true,
+      contentType: 'text'
     });
   }
 
@@ -243,6 +249,7 @@
   /**
    * Particles.js
    */
+  /*
   if (document.getElementById('particles-js')) {
     particlesJS("particles-js", {
       "particles": {
@@ -350,6 +357,7 @@
       "retina_detect": true
     });
   }
+  */
 
   /**
    * Vanilla Tilt
@@ -364,31 +372,115 @@
   }
 
   /**
-   * Custom Cursor - Dev Power Follower
+   * Custom Cursor - Dev Power Follower & Particle System
    */
   const cursorFollower = document.createElement('div');
   cursorFollower.classList.add('cursor-follower');
   cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
   document.body.appendChild(cursorFollower);
 
+  // Canvas for particle trail
+  const canvas = document.createElement('canvas');
+  canvas.id = 'cursor-canvas';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  window.addEventListener('resize', () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  });
+
   let mouseX = 0;
   let mouseY = 0;
   let followerX = 0;
   let followerY = 0;
   let scale = 1;
+  
+  // Particle System
+  const particles = [];
+  const maxParticles = 20; // Limit for performance
+
+  class Particle {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.size = Math.random() * 2 + 1;
+      this.speedX = Math.random() * 2 - 1;
+      this.speedY = Math.random() * 2 - 1;
+      this.life = 1; // Opacity/Life
+      this.decay = Math.random() * 0.03 + 0.02;
+    }
+    
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.life -= this.decay;
+      if (this.size > 0.2) this.size -= 0.1;
+    }
+    
+    draw() {
+      ctx.fillStyle = `rgba(77, 163, 255, ${this.life})`;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
 
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
+    
+    // Spawn particles on move
+    if (Math.random() > 0.5 && particles.length < maxParticles) {
+      particles.push(new Particle(mouseX, mouseY));
+    }
   });
 
   function animateCursor() {
-    // Smooth lerp movement
+    // Smooth lerp movement for the main cursor
     followerX += (mouseX - followerX) * 0.15;
     followerY += (mouseY - followerY) * 0.15;
     
     cursorFollower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%) scale(${scale})`;
     
+    // Canvas Render Loop
+    ctx.clearRect(0, 0, width, height);
+    
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+      
+      // Remove dead particles
+      if (particles[i].life <= 0) {
+        particles.splice(i, 1);
+        i--;
+      }
+    }
+    
+    // Draw connecting lines (Constellation effect)
+    // Only connect if close to cursor
+    ctx.strokeStyle = 'rgba(77, 163, 255, 0.1)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    for (let i = 0; i < particles.length; i++) {
+      const dx = particles[i].x - followerX;
+      const dy = particles[i].y - followerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance < 100) {
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(followerX, followerY);
+      }
+    }
+    ctx.stroke();
+
     requestAnimationFrame(animateCursor);
   }
   animateCursor();
@@ -407,5 +499,63 @@
       cursorFollower.style.borderColor = 'rgba(77, 163, 255, 0.5)';
     });
   });
+
+  /**
+   * Global Background Animation - Digital Rain
+   */
+  const bgCanvas = document.getElementById('global-canvas');
+  if (bgCanvas) {
+    const bgCtx = bgCanvas.getContext('2d');
+    let bgWidth = window.innerWidth;
+    let bgHeight = window.innerHeight;
+    
+    bgCanvas.width = bgWidth;
+    bgCanvas.height = bgHeight;
+
+    const chars = '01<>/{}';
+    const fontSize = 14;
+    const columns = bgWidth / fontSize;
+    const drops = [];
+
+    for (let x = 0; x < columns; x++) {
+      drops[x] = 1;
+    }
+
+    function drawBg() {
+      // Translucent black background to create trail effect
+      bgCtx.fillStyle = 'rgba(17, 17, 17, 0.05)';
+      bgCtx.fillRect(0, 0, bgWidth, bgHeight);
+
+      bgCtx.fillStyle = 'rgba(77, 163, 255, 0.25)'; // Theme blue with low opacity
+      bgCtx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        bgCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > bgHeight && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+      requestAnimationFrame(drawBg);
+    }
+
+    // Start animation loop
+    requestAnimationFrame(drawBg);
+
+    window.addEventListener('resize', () => {
+      bgWidth = window.innerWidth;
+      bgHeight = window.innerHeight;
+      bgCanvas.width = bgWidth;
+      bgCanvas.height = bgHeight;
+      // Re-init drops
+      const newColumns = bgWidth / fontSize;
+      drops.length = 0;
+      for (let x = 0; x < newColumns; x++) {
+        drops[x] = 1;
+      }
+    });
+  }
 
 })()
