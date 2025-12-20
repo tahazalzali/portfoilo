@@ -255,6 +255,8 @@
    * Mobile scroll-reveal to match desktop motion
    */
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
   if (isMobile) {
     const revealTargets = document.querySelectorAll(
       '.box-shadow-full, .work-box, .project-card, .service-box, .title-box, .about-info, .about-me, .hero-title, .hero-subtitle'
@@ -418,6 +420,11 @@
   /**
    * Custom Cursor - Dev Power Follower & Particle System
    */
+  let pauseCursor = () => {};
+  let resumeCursor = () => {};
+  let pauseBg = () => {};
+  let resumeBg = () => {};
+
   let isScrolling = false;
   let scrollStopTimer;
   window.addEventListener('scroll', () => {
@@ -425,145 +432,178 @@
     clearTimeout(scrollStopTimer);
     scrollStopTimer = setTimeout(() => {
       isScrolling = false;
+      resumeCursor();
+      resumeBg();
     }, 120);
+    pauseCursor();
+    pauseBg();
   }, { passive: true });
 
-  const cursorFollower = document.createElement('div');
-  cursorFollower.classList.add('cursor-follower');
-  cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
-  document.body.appendChild(cursorFollower);
+  if (!prefersReducedMotion && hasFinePointer) {
+    const cursorFollower = document.createElement('div');
+    cursorFollower.classList.add('cursor-follower');
+    cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
+    document.body.appendChild(cursorFollower);
 
-  // Canvas for particle trail
-  const canvas = document.createElement('canvas');
-  canvas.id = 'cursor-canvas';
-  document.body.appendChild(canvas);
-  const ctx = canvas.getContext('2d');
+    // Canvas for particle trail
+    const canvas = document.createElement('canvas');
+    canvas.id = 'cursor-canvas';
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
 
-  let width = window.innerWidth;
-  let height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
-
-  window.addEventListener('resize', () => {
-    width = window.innerWidth;
-    height = window.innerHeight;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
     canvas.width = width;
     canvas.height = height;
-  });
 
-  let mouseX = 0;
-  let mouseY = 0;
-  let followerX = 0;
-  let followerY = 0;
-  let scale = 1;
-  
-  // Particle System
-  const particles = [];
-  const maxParticles = 20; // Limit for performance
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
 
-  class Particle {
-    constructor(x, y) {
-      this.x = x;
-      this.y = y;
-      this.size = Math.random() * 2 + 1;
-      this.speedX = Math.random() * 2 - 1;
-      this.speedY = Math.random() * 2 - 1;
-      this.life = 1; // Opacity/Life
-      this.decay = Math.random() * 0.03 + 0.02;
-    }
-    
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.life -= this.decay;
-      if (this.size > 0.2) this.size -= 0.1;
-    }
-    
-    draw() {
-      ctx.fillStyle = `rgba(77, 163, 255, ${this.life})`;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
+    let mouseX = 0;
+    let mouseY = 0;
+    let followerX = 0;
+    let followerY = 0;
+    let scale = 1;
+    let cursorRafId = null;
+    let lastCursorFrame = 0;
 
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    
-    // Spawn particles on move
-    if (Math.random() > 0.5 && particles.length < maxParticles) {
-      particles.push(new Particle(mouseX, mouseY));
-    }
-  });
+    // Particle System
+    const particles = [];
+    const maxParticles = 20; // Limit for performance
 
-  function animateCursor() {
-    // Smooth lerp movement for the main cursor
-    followerX += (mouseX - followerX) * 0.15;
-    followerY += (mouseY - followerY) * 0.15;
-    
-    cursorFollower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%) scale(${scale})`;
-    
-    if (!isScrolling) {
-      // Canvas Render Loop
-      ctx.clearRect(0, 0, width, height);
-      
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-        
-        // Remove dead particles
-        if (particles[i].life <= 0) {
-          particles.splice(i, 1);
-          i--;
-        }
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * 2 - 1;
+        this.life = 1; // Opacity/Life
+        this.decay = Math.random() * 0.03 + 0.02;
       }
       
-      // Draw connecting lines (Constellation effect)
-      // Only connect if close to cursor
-      ctx.strokeStyle = 'rgba(77, 163, 255, 0.1)';
-      ctx.lineWidth = 0.5;
-      ctx.beginPath();
-      for (let i = 0; i < particles.length; i++) {
-        const dx = particles[i].x - followerX;
-        const dy = particles[i].y - followerY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < 100) {
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(followerX, followerY);
-        }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.life -= this.decay;
+        if (this.size > 0.2) this.size -= 0.1;
       }
-      ctx.stroke();
+      
+      draw() {
+        ctx.fillStyle = `rgba(77, 163, 255, ${this.life})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      // Spawn particles on move
+      if (Math.random() > 0.5 && particles.length < maxParticles) {
+        particles.push(new Particle(mouseX, mouseY));
+      }
+    });
 
-  // Hover effects
-  const hoverElements = document.querySelectorAll('a, button, .work-box, .service-box, .card-blog, input, textarea');
-  hoverElements.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      scale = 1.5;
-      cursorFollower.style.backgroundColor = 'rgba(77, 163, 255, 0.1)';
-      cursorFollower.style.borderColor = 'transparent';
+    function animateCursor(timestamp) {
+      if (cursorRafId === null) return;
+      if (timestamp - lastCursorFrame < 1000 / 30) {
+        cursorRafId = requestAnimationFrame(animateCursor);
+        return;
+      }
+      lastCursorFrame = timestamp;
+
+      // Smooth lerp movement for the main cursor
+      followerX += (mouseX - followerX) * 0.15;
+      followerY += (mouseY - followerY) * 0.15;
+      
+      cursorFollower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%) scale(${scale})`;
+      
+      if (!isScrolling) {
+        // Canvas Render Loop
+        ctx.clearRect(0, 0, width, height);
+        
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw();
+          
+          // Remove dead particles
+          if (particles[i].life <= 0) {
+            particles.splice(i, 1);
+            i--;
+          }
+        }
+        
+        // Draw connecting lines (Constellation effect)
+        // Only connect if close to cursor
+        ctx.strokeStyle = 'rgba(77, 163, 255, 0.1)';
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        for (let i = 0; i < particles.length; i++) {
+          const dx = particles[i].x - followerX;
+          const dy = particles[i].y - followerY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 100) {
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(followerX, followerY);
+          }
+        }
+        ctx.stroke();
+      }
+
+      cursorRafId = requestAnimationFrame(animateCursor);
+    }
+
+    const startCursorAnimation = () => {
+      if (cursorRafId !== null) return;
+      cursorRafId = requestAnimationFrame(animateCursor);
+    };
+
+    pauseCursor = () => {
+      if (cursorRafId === null) return;
+      cancelAnimationFrame(cursorRafId);
+      cursorRafId = null;
+    };
+
+    resumeCursor = () => {
+      startCursorAnimation();
+    };
+
+    startCursorAnimation();
+
+    // Hover effects
+    const hoverElements = document.querySelectorAll('a, button, .work-box, .service-box, .card-blog, input, textarea');
+    hoverElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        scale = 1.5;
+        cursorFollower.style.backgroundColor = 'rgba(77, 163, 255, 0.1)';
+        cursorFollower.style.borderColor = 'transparent';
+      });
+      el.addEventListener('mouseleave', () => {
+        scale = 1;
+        cursorFollower.style.backgroundColor = 'rgba(77, 163, 255, 0.15)';
+        cursorFollower.style.borderColor = 'rgba(77, 163, 255, 0.5)';
+      });
     });
-    el.addEventListener('mouseleave', () => {
-      scale = 1;
-      cursorFollower.style.backgroundColor = 'rgba(77, 163, 255, 0.15)';
-      cursorFollower.style.borderColor = 'rgba(77, 163, 255, 0.5)';
-    });
-  });
+  }
 
   /**
    * Global Background Animation - Digital Rain
    */
   const bgCanvas = document.getElementById('global-canvas');
-  if (bgCanvas) {
+  if (bgCanvas && !prefersReducedMotion && !isMobile) {
     const bgCtx = bgCanvas.getContext('2d');
     let bgWidth = window.innerWidth;
     let bgHeight = window.innerHeight;
+    let bgRafId = null;
+    let lastBgFrame = 0;
     
     bgCanvas.width = bgWidth;
     bgCanvas.height = bgHeight;
@@ -577,9 +617,15 @@
       drops[x] = 1;
     }
 
-    function drawBg() {
+    function drawBg(timestamp) {
+      if (bgRafId === null) return;
+      if (timestamp - lastBgFrame < 1000 / 30) {
+        bgRafId = requestAnimationFrame(drawBg);
+        return;
+      }
+      lastBgFrame = timestamp;
       if (isScrolling) {
-        requestAnimationFrame(drawBg);
+        bgRafId = requestAnimationFrame(drawBg);
         return;
       }
       // Translucent black background to create trail effect
@@ -598,11 +644,23 @@
         }
         drops[i]++;
       }
-      requestAnimationFrame(drawBg);
+      bgRafId = requestAnimationFrame(drawBg);
     }
 
     // Start animation loop
-    requestAnimationFrame(drawBg);
+    const startBgAnimation = () => {
+      if (bgRafId !== null) return;
+      bgRafId = requestAnimationFrame(drawBg);
+    };
+    pauseBg = () => {
+      if (bgRafId === null) return;
+      cancelAnimationFrame(bgRafId);
+      bgRafId = null;
+    };
+    resumeBg = () => {
+      startBgAnimation();
+    };
+    startBgAnimation();
 
     window.addEventListener('resize', () => {
       bgWidth = window.innerWidth;
