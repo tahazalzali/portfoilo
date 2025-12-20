@@ -1,0 +1,453 @@
+
+/*--------------------------------------------------------------
+# Modern UI Overrides & Enhancements
+--------------------------------------------------------------*/
+
+/* Global Typography */
+body {
+  font-family: 'Poppins', sans-serif;
+  color: #f5f5f5;
+  background-color: #111;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Global Link Styling for Dark Mode */
+a {
+  color: #4da3ff; /* Lighter blue for better contrast on dark */
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #fff;
+  text-shadow: 0 0 8px rgba(77, 163, 255, 0.6);
+  text-decoration: none;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Navbar Glassmorphism */
+#header {
+  transition: all 0.5s;
+  z-index: 997;
+  padding: 20px 0;
+}
+
+#header.header-scrolled {
+  background: rgba(20, 20, 20, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.5);
+  padding: 12px 0;
+}
+
+.navbar a {
+  font-weight: 500;
+  color: #fff !important;
+}
+
+.navbar .active, .navbar .active:focus, .navbar li:hover > a {
+  color: #0078ff !important;
+}
+
+/* Hero Section Enhancements */
+.hero {
+  position: relative;
+}
+
+.overlay-itro {
+  background: linear-gradient(135deg, rgba(0, 120, 255, 0.6) 0%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  color: #fff;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #ddd;
+}
+
+/* About Section & Skills */
+.about-mf .box-shadow-full {
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255,255,255,0.05);
+  background-color: #1a1a1a;
+  color: #ddd;
+}
+
+.title-s {
+  color: #fff;
+  font-weight: 600;
+}
+
+.about-me .lead {
+  color: #ccc;
+}
+
+.skill-mf ul li {
+  display: inline-block;
+  margin: 5px 5px 5px 0;
+  padding: 8px 16px;
+  background: #2a2a2a;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  color: #ddd;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.skill-mf ul li:hover {
+  background: #0078ff;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 120, 255, 0.3);
+}
+
+.skill-mf h4 {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #0078ff;
+  font-weight: 600;
+}
+
+/* Cards (Certificates & Projects) */
+.work-box {
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: all 0.4s ease;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.05);
+  will-change: transform; /* Hardware acceleration hint */
+}
+
+.work-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 120, 255, 0.15);
+}
+
+.work-img img {
+  transition: all 1s;
+}
+
+.work-box:hover .work-img img {
+  transform: scale(1.1);
+}
+
+.work-content {
+  padding: 2rem;
+}
+
+.w-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.w-more {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.w-like a {
+  color: #0078ff;
+  font-size: 1.5rem;
+}
+
+.text-muted {
+  color: #888 !important;
+}
+
+/* Contact Section */
+.contact-mf .box-shadow-full {
+  border-radius: 1rem;
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: #ddd;
+}
+
+.title-box-2 .title-left {
+  color: #fff;
+  position: relative;
+}
+
+.title-box-2 .title-left:before {
+  background-color: #0078ff;
+}
+
+.socials .ico-circle {
+  box-shadow: 0 0 0 3px #0078ff;
+  transition: all 0.3s ease;
+  background: #222;
+  color: #fff;
+}
+
+.socials .ico-circle:hover {
+  background-color: #0078ff;
+  color: #fff;
+  box-shadow: 0 0 0 5px rgba(0, 120, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Section Titles */
+.title-box .title-a {
+  color: #fff;
+}
+
+.title-box .subtitle-a {
+  color: #aaa;
+}
+
+.line-mf {
+  background-color: #0078ff;
+}
+
+/* Blog/Projects Section */
+.card-blog {
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.card-blog .card-title {
+  color: #fff;
+}
+
+.card-blog .card-description {
+  color: #ccc;
+}
+
+/* Enhanced Link Visibility in Content Areas */
+.about-info a, 
+.list-unstyled a,
+.more-info a {
+  position: relative;
+  display: inline-block;
+  font-weight: 500;
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin: 0 -4px; /* Offset padding */
+}
+
+.about-info a:hover, 
+.list-unstyled a:hover,
+.more-info a:hover {
+  background: rgba(77, 163, 255, 0.15);
+  color: #66b3ff;
+}
+
+/* Specific tweak for the Projects list to make URLs pop */
+.list-unstyled li a {
+  color: #4da3ff;
+  word-break: break-all; /* Ensure long URLs don't break layout */
+}
+
+.list-unstyled li strong {
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+/* Particles Container */
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 5; /* Increased z-index to be above overlay but below content */
+}
+
+.overlay-itro {
+  z-index: 2; 
+  opacity: 0.6; /* Slightly reduced opacity to let particles shine through if behind, but now particles are above */
+}
+
+.hero-content {
+  z-index: 10; /* Ensure content is clickable and visible */
+  position: relative;
+}
+
+/* Custom Cursor */
+body {
+  cursor: none;
+}
+
+a, button, .work-box, .btn, input, textarea {
+  cursor: none;
+}
+
+.cursor {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #0078ff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+  mix-blend-mode: difference;
+  will-change: transform;
+}
+
+.cursor2 {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #0078ff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+  mix-blend-mode: difference;
+  will-change: transform, width, height;
+}
+
+.cursor-hover {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(0, 120, 255, 0.3);
+  border-color: transparent;
+  mix-blend-mode: normal;
+}
+
+/* Project Cards - Attractive UI/UX */
+.project-card {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  height: 100%;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  border-color: #0078ff;
+  box-shadow: 0 10px 30px rgba(0, 120, 255, 0.15);
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #0078ff, #00c6ff);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.project-card:hover::before {
+  opacity: 1;
+}
+
+.project-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.project-title a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.project-title a:hover {
+  color: #0078ff;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.tech-tag {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  background: rgba(0, 120, 255, 0.1);
+  color: #4da3ff;
+  border-radius: 20px;
+  font-weight: 500;
+  border: 1px solid rgba(0, 120, 255, 0.2);
+}
+
+.project-desc {
+  font-size: 0.95rem;
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.project-links a {
+  font-size: 0.9rem;
+  color: #888;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.project-links a:hover {
+  color: #0078ff;
+}
+
+/* Footer */
+footer {
+  background: #0062d3;
+  background: linear-gradient(45deg, #0062d3 0%, #0078ff 100%);
+}
+
+/* Scroll to Top Button */
+.back-to-top {
+  background: #0078ff;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  transition: all 0.3s;
+}
+
+.back-to-top:hover {
+  background: #0062d3;
+  transform: translateY(-3px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .box-shadow-full {
+    padding: 2rem 1rem;
+  }
+}

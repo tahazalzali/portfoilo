@@ -187,6 +187,7 @@
   new Swiper('.testimonials-slider', {
     speed: 600,
     loop: true,
+    grabCursor: true,
     autoplay: {
       delay: 5000,
       disableOnInteraction: false
@@ -205,6 +206,7 @@
   new Swiper('.portfolio-details-slider', {
     speed: 400,
     loop: true,
+    grabCursor: true,
     autoplay: {
       delay: 5000,
       disableOnInteraction: false
@@ -223,6 +225,168 @@
   if (preloader) {
     window.addEventListener('load', () => {
       preloader.remove()
+    });
+  }
+
+  /**
+   * Animation on scroll
+   */
+  window.addEventListener('load', () => {
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true,
+      mirror: false
+    })
+  });
+
+  /**
+   * Particles.js
+   */
+  if (document.getElementById('particles-js')) {
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 50,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#ffffff"
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#000000"
+          },
+          "polygon": {
+            "nb_sides": 5
+          }
+        },
+        "opacity": {
+          "value": 0.5,
+          "random": false,
+          "anim": {
+            "enable": false,
+            "speed": 1,
+            "opacity_min": 0.1,
+            "sync": false
+          }
+        },
+        "size": {
+          "value": 3,
+          "random": true,
+          "anim": {
+            "enable": false,
+            "speed": 40,
+            "size_min": 0.1,
+            "sync": false
+          }
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#ffffff",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 2,
+          "direction": "none",
+          "random": false,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {
+            "enable": false,
+            "rotateX": 600,
+            "rotateY": 1200
+          }
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "grab"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "grab": {
+            "distance": 140,
+            "line_linked": {
+              "opacity": 1
+            }
+          },
+          "bubble": {
+            "distance": 400,
+            "size": 40,
+            "duration": 2,
+            "opacity": 8,
+            "speed": 3
+          },
+          "repulse": {
+            "distance": 200,
+            "duration": 0.4
+          },
+          "push": {
+            "particles_nb": 4
+          },
+          "remove": {
+            "particles_nb": 2
+          }
+        }
+      },
+      "retina_detect": true
+    });
+  }
+
+  /**
+   * Vanilla Tilt
+   */
+  if (typeof VanillaTilt !== 'undefined') {
+    VanillaTilt.init(document.querySelectorAll(".work-box"), {
+      max: 15,
+      speed: 400,
+      glare: true,
+      "max-glare": 0.2,
+    });
+  }
+
+  /**
+   * Custom Cursor
+   */
+  const cursor = document.querySelector('.cursor');
+  const cursor2 = document.querySelector('.cursor2');
+
+  if (cursor && cursor2) {
+    document.addEventListener('mousemove', function(e) {
+      const x = e.clientX;
+      const y = e.clientY;
+      // Use transform for hardware accelerated movement
+      cursor.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+      cursor2.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+    });
+
+    // Add hover effect for links and buttons
+    const hoverElements = document.querySelectorAll('a, button, .work-box, .service-box, .card-blog');
+    hoverElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor2.classList.add('cursor-hover');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor2.classList.remove('cursor-hover');
+      });
     });
   }
 

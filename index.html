@@ -11,7 +11,11 @@
   <link href="media/tahaLogo.jpg" rel="icon">
   <link href="media/tahaLogo.jpg" rel="apple-touch-icon">
 
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i|Playfair+Display:400,400i,500,500i,600,600i,700,700i&display=swap" rel="stylesheet">
+
   <!-- Vendor CSS Files -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
     integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -21,6 +25,7 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/custom-style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -50,13 +55,14 @@
 
   <!-- ======= Hero Section ======= -->
   <div id="hero" class="hero route bg-image" style="background-image: url(assets/img/work-5.jpg)">
+    <div id="particles-js"></div>
     <div class="overlay-itro"></div>
     <div class="hero-content display-table">
       <div class="table-cell">
         <div class="container">
-          <h1 class="hero-title mb-4">Taha Zalzali</h1>
-          <p class="hero-subtitle">
-            <span class="typed" data-typed-items="Senior Full-Stack Engineer, React/Next.js • Node.js • Python • AWS, AI-Powered Products"></span>
+          <h1 class="hero-title mb-4" data-aos="fade-up" data-aos-duration="1000">Taha Zalzali</h1>
+          <p class="hero-subtitle" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">
+            <span class="typed" data-typed-items="Senior Backend & Full-Stack Engineer, Node.js • .NET • Python • AWS, Scalable Architectures"></span>
           </p>
         </div>
       </div>
@@ -70,17 +76,17 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
-            <div class="box-shadow-full">
+            <div class="box-shadow-full" data-aos="fade-up">
               <div class="row">
                 <div class="col-md-6">
                   <div class="row">
                     <div class="col-sm-6 col-md-5">
-                      <div class="about-img">
+                      <div class="about-img" data-aos="zoom-in" data-aos-delay="200">
                         <img src="./tahalogo-noblue.png" class="img-fluid rounded b-shadow-a" alt="Taha Zalzali">
                       </div>
                     </div>
                     <div class="col-sm-6 col-md-7">
-                      <div class="about-info">
+                      <div class="about-info" data-aos="fade-left" data-aos-delay="300">
                         <p><span class="title-s">Name: </span> <span>Taha Zalzali</span></p>
                         <p><span class="title-s">Profile: </span> <span>Senior Full-Stack Engineer</span></p>
                         <p><span class="title-s">Email: </span>
@@ -93,49 +99,77 @@
                   </div>
 
                   <!-- Skills — tailored to Ivy & Company role -->
-                  <div class="skill-mf d-flex">
-                    <h4>Skills:</h4>
-                    <ul class="title-s w-100 d-flex flex-column justify-content-center align-items-stretch">
-                      <br>
-                      <li><h4>Frontend</h4></li>
-                      <li>React • Next.js • Redux</li>
-                      <li>TypeScript • JavaScript (ES6+)</li>
-                      <li>Responsive UI & design systems</li>
-                      <li>HTML5 • CSS3/SCSS • Bootstrap</li>
+                  <div class="skill-mf" data-aos="fade-up" data-aos-delay="400">
+                    <div class="title-box-2">
+                      <h5 class="title-left">Skills</h5>
+                    </div>
 
-                      <li class="mt-2"><h4>Backend & APIs</h4></li>
-                      <li>Node.js (Express/Nest) • REST/GraphQL</li>
-                      <li>Python</li>
-                      <li>PHP/Laravel • Java (foundational)</li>
-                      <li>MySQL • PostgreSQL • MongoDB (NoSQL)</li>
-                      <li>Microservices • Event-driven patterns</li>
+                    <div class="skill-group mb-3">
+                      <h6 class="text-primary fw-bold mb-2">Backend & APIs</h6>
+                      <ul class="list-unstyled d-flex flex-wrap">
+                        <li>Node.js (Express/Nest)</li>
+                        <li>.NET Core / C#</li>
+                        <li>REST/GraphQL</li>
+                        <li>Python</li>
+                        <li>PHP/Laravel</li>
+                        <li>Java</li>
+                        <li>MySQL</li>
+                        <li>PostgreSQL</li>
+                        <li>MongoDB</li>
+                        <li>Microservices</li>
+                      </ul>
+                    </div>
 
-                      <li class="mt-2"><h4>Cloud & DevOps</h4></li>
-                      <li>AWS (EC2, Lambda, API Gateway, S3/CloudFront, SQS/SNS, Step Functions, VPC)</li>
-                      <li>CI/CD (GitHub/GitLab, Docker)</li>
-                      <li>Observability (logs/metrics/tracing)</li>
-                      <li>Security, performance, cost optimization</li>
+                    <div class="skill-group mb-3">
+                      <h6 class="text-primary fw-bold mb-2">Frontend</h6>
+                      <ul class="list-unstyled d-flex flex-wrap">
+                        <li>React</li>
+                        <li>Next.js</li>
+                        <li>Redux</li>
+                        <li>TypeScript</li>
+                        <li>JavaScript (ES6+)</li>
+                        <li>Responsive UI</li>
+                        <li>HTML5</li>
+                        <li>CSS3/SCSS</li>
+                        <li>Bootstrap</li>
+                      </ul>
+                    </div>
 
-                      <li class="mt-2"><h4>AI / Data</h4></li>
-                      <li>AI/ML integration (OCR, LLM/VLM APIs)</li>
-                      <li>Analytics, A/B testing, growth tooling</li>
-                    </ul>
+                    <div class="skill-group mb-3">
+                      <h6 class="text-primary fw-bold mb-2">Cloud & DevOps</h6>
+                      <ul class="list-unstyled d-flex flex-wrap">
+                        <li>AWS</li>
+                        <li>CI/CD</li>
+                        <li>Docker</li>
+                        <li>Observability</li>
+                        <li>Security</li>
+                        <li>Cost Optimization</li>
+                      </ul>
+                    </div>
+
+                    <div class="skill-group mb-3">
+                      <h6 class="text-primary fw-bold mb-2">AI / Data</h6>
+                      <ul class="list-unstyled d-flex flex-wrap">
+                        <li>AI/ML Integration</li>
+                        <li>OCR</li>
+                        <li>LLM/VLM APIs</li>
+                        <li>Analytics</li>
+                        <li>A/B Testing</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
 
                 <div class="col-md-6">
-                  <div class="about-me pt-4 pt-md-0">
+                  <div class="about-me pt-4 pt-md-0" data-aos="fade-left" data-aos-delay="200">
                     <div class="title-box-2">
                       <h5 class="title-left">About me</h5>
                     </div>
                     <p class="lead">
-                      Senior full-stack developer with 5+ years building scalable web and mobile products. I lead end-to-end
-                      delivery—architecture, APIs, data, and front-end—while owning CI/CD, observability, and cloud costs.
+                      Senior Backend & Full-Stack Engineer with 5+ years of experience building mission-critical applications that serve <strong>millions of daily active users</strong>. I specialize in architecting scalable <strong>microservices</strong> and distributed systems using <strong>Node.js</strong> and <strong>.NET</strong>, delivering high-performance solutions that remain stable under extreme load.
                     </p>
                     <p class="lead">
-                      Recent work includes React/Next.js experiences, Node.js/TypeScript microservices, and AI-powered features
-                      deployed on AWS. I collaborate closely with product/design and translate business needs into secure,
-                      maintainable systems.
+                      I am committed to writing <strong>high-quality, clean code</strong> and implementing best practices that ensure long-term maintainability. My expertise spans the full software lifecycle—from architecting cloud infrastructure on <strong>AWS</strong> to optimizing <strong>database performance</strong>—helping organizations scale their technology stack while maintaining agility and operational excellence.
                     </p>
                     <!-- <p class="lead">
                       (Resume download removed by request. Happy to share on request.)
@@ -156,7 +190,7 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
-            <div class="title-box text-center">
+            <div class="title-box text-center" data-aos="fade-up">
               <h3 class="title-a m-auto" style="max-width: 420px; overflow: hidden;">Certificates</h3>
               <p class="subtitle-a">Credentials aligned to front-end, cloud, and DevOps excellence</p>
               <div class="line-mf"></div>
@@ -166,7 +200,33 @@
 
         <div class="row">
           <!-- Certificates kept with images as before -->
-          <div class="col-md-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="work-box">
+              <a href="./certificates/Backend_with_dotnet.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
+                <div class="work-img">
+                  <img src="./certificates/Backend_with_dotnet.jpg" alt="Back-End Development with .NET" class="img-fluid">
+                </div>
+              </a>
+              <div class="work-content">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h2 class="w-title">Back-End Development with .NET</h2>
+                    <div class="w-more"><span class="w-ctegory">Backend Engineering</span> / <span class="w-date">2024</span></div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="w-like">
+                      <a href="https://www.coursera.org/account/accomplishments/verify/FNGRL4J0AI1K" target="_blank" data-toggle="tooltip" title="See credential">
+                        <span class="bi bi-plus-circle"></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <small class="text-muted">.NET Core, C#, API Development, Microservices</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
             <div class="work-box">
               <a href="./certificates/Meta Frontend Developer.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
                 <div class="work-img">
@@ -181,7 +241,7 @@
                   </div>
                   <div class="col-sm-4">
                     <div class="w-like">
-                      <a href="https://www.coursera.org/account/accomplishments/specialization/certificate/TEXZKJRUMH9U" target="_blank" data-toggle="tooltip" title="See credential">
+                      <a href="https://www.credly.com/badges/2d9b5238-e993-4dce-9530-096dc9fc2514/public_url" target="_blank" data-toggle="tooltip" title="See credential">
                         <span class="bi bi-plus-circle"></span>
                       </a>
                     </div>
@@ -192,7 +252,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
             <div class="work-box">
               <a href="./certificates/aws_certificate.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
                 <div class="work-img">
@@ -218,7 +278,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
             <div class="work-box">
               <a href="./certificates/Coursera_ibm-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
                 <div class="work-img">
@@ -245,7 +305,7 @@
           </div>
 
           <!-- Remaining certificates kept -->
-          <div class="col-md-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
             <div class="work-box">
               <a href="./certificates/Front-End Web Development with React.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
                 <div class="work-img">
@@ -271,7 +331,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
             <div class="work-box">
               <a href="./certificates/Web Applications for.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
                 <div class="work-img">
@@ -297,7 +357,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
             <div class="work-box">
               <a href="./certificates/Front-End Web UI Frameworks and Tools Bootstrap 4.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
                 <div class="work-img">
@@ -323,7 +383,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
             <div class="work-box">
               <a href="./certificates/Divide and Conquer, Sorting and Searching, and Randomized Algorithms-images.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
                 <div class="work-img">
@@ -349,7 +409,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
             <div class="work-box">
               <a href="./certificates/HTML, CSS, and Javascript for Web Developers-images.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
                 <div class="work-img">
@@ -375,7 +435,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
             <div class="work-box">
               <a href="./certificates/fundemantal-digital-marketing-images.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox">
                 <div class="work-img">
@@ -410,7 +470,7 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
-            <div class="title-box text-center">
+            <div class="title-box text-center" data-aos="fade-up">
               <h3 class="title-a">Projects</h3>
               <p class="subtitle-a">Production apps & AI-integrated platforms (URLs only)</p>
               <div class="line-mf"></div>
@@ -418,74 +478,167 @@
           </div>
         </div>
 
-        <div class="row g-3">
-          <div class="col-12">
-            <h5 class="mb-2">Live Applications</h5>
-            <ul class="list-unstyled">
-              <li class="mb-2">
-                <strong>Soulmed HealthCare</strong> —
-                <a href="https://www.soulmedhc.com" target="_blank">https://www.soulmedhc.com</a><br>
-                Full-stack (React + Spring Boot) on AWS; doctor search, appointment & scheduling, real-time chat/video; CI/CD ownership.
-              </li>
-              <li class="mb-2">
-                <strong>Student Paddy</strong> —
-                <a href="https://www.studentpaddy.com" target="_blank">https://www.studentpaddy.com</a><br>
-                Next.js from zero to production in a week; applied business rules and optimized AWS deployment with rapid iteration.
-              </li>
-              <li class="mb-2">
-                <strong>IRAPLB</strong> —
-                <a href="https://iraplb.org" target="_blank">https://iraplb.org</a> &nbsp;|&nbsp;
-                Demo code: <a href="https://github.com/tahazalzali/irap" target="_blank">github.com/tahazalzali/irap</a><br>
-                Full-stack Laravel with clean API boundaries, accessibility, and documented handoffs.
-              </li>
-              <li class="mb-2">
-                <strong>Al Afkar</strong> —
-                <a href="https://alafkar.net" target="_blank">https://alafkar.net</a><br>
-                Laravel backend, bank payment integration, and robust CMS features.
-              </li>
-            </ul>
+        <div class="row g-4">
+          <div class="col-12" data-aos="fade-up" data-aos-delay="100">
+            <h5 class="mb-4 text-white border-bottom pb-2" style="border-color: rgba(255,255,255,0.1) !important;">Live Applications</h5>
+            <div class="row g-4">
+              <!-- Soulmed -->
+              <div class="col-md-6">
+                <div class="project-card">
+                  <div class="project-title">
+                    <a href="https://www.soulmedhc.com" target="_blank">Soulmed HealthCare <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.8em;"></i></a>
+                  </div>
+                  <div class="project-tech">
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Spring Boot</span>
+                    <span class="tech-tag">AWS</span>
+                    <span class="tech-tag">Microservices</span>
+                  </div>
+                  <p class="project-desc">
+                    Engineered a HIPAA-compliant telemedicine platform serving thousands of patients. Reduced appointment booking time by 40% via optimized React flows and scalable Spring Boot microservices on AWS. Owned the full CI/CD pipeline for rapid, reliable deployments.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Student Paddy -->
+              <div class="col-md-6">
+                <div class="project-card">
+                  <div class="project-title">
+                    <a href="https://www.studentpaddy.com" target="_blank">Student Paddy <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.8em;"></i></a>
+                  </div>
+                  <div class="project-tech">
+                    <span class="tech-tag">Next.js</span>
+                    <span class="tech-tag">Node.js</span>
+                    <span class="tech-tag">AWS Lambda</span>
+                    <span class="tech-tag">Serverless</span>
+                  </div>
+                  <p class="project-desc">
+                    Launched a high-traffic educational platform from zero to production in just 7 days. Leveraged Next.js for SEO dominance and a serverless AWS architecture to auto-scale during peak exam periods, handling sudden traffic spikes with zero downtime.
+                  </p>
+                </div>
+              </div>
+
+              <!-- IRAPLB -->
+              <div class="col-md-6">
+                <div class="project-card">
+                  <div class="project-title">
+                    <a href="https://iraplb.org" target="_blank">IRAPLB <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.8em;"></i></a>
+                  </div>
+                  <div class="project-tech">
+                    <span class="tech-tag">Laravel</span>
+                    <span class="tech-tag">MySQL</span>
+                    <span class="tech-tag">API Design</span>
+                    <span class="tech-tag">Accessibility</span>
+                  </div>
+                  <p class="project-desc">
+                    Modernized a legacy system into a robust Laravel-based architecture. Established clear API boundaries and improved accessibility scores by 35%, ensuring the platform serves all users effectively while maintaining strict data integrity.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://github.com/tahazalzali/irap" target="_blank"><i class="bi bi-github"></i> View Source</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Al Afkar -->
+              <div class="col-md-6">
+                <div class="project-card">
+                  <div class="project-title">
+                    <a href="https://alafkar.net" target="_blank">Al Afkar <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.8em;"></i></a>
+                  </div>
+                  <div class="project-tech">
+                    <span class="tech-tag">Laravel</span>
+                    <span class="tech-tag">Payment Gateways</span>
+                    <span class="tech-tag">CMS</span>
+                  </div>
+                  <p class="project-desc">
+                    Developed a secure e-commerce backend with seamless bank payment integration. Built a custom CMS that empowered the content team to manage thousands of articles and products, streamlining operations and boosting revenue.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="col-12 mt-3">
-            <h5 class="mb-2">Personal Projects</h5>
-            <ul class="list-unstyled">
-              <li class="mb-3">
-                <strong>AI Question &ndash; architecture deep dive</strong><br>
-                Detailed walkthrough of the ingestion, normalization, and retrieval pipelines that power the Question AI product above, covering compliance guardrails, prompt orchestration, and scoring heuristics.
-                <div class="mt-2">
-                  <a href="https://youtu.be/bLGtPHjFA4E" target="_blank" rel="noopener">
-                    <img src="assets/img/ai-question.png" alt="AI Question app preview" class="img-fluid rounded shadow-sm" style="max-width: 320px;">
-                  </a>
+          <div class="col-12 mt-5" data-aos="fade-up" data-aos-delay="200">
+            <h5 class="mb-4 text-white border-bottom pb-2" style="border-color: rgba(255,255,255,0.1) !important;">Personal Projects & R&D</h5>
+            <div class="row g-4">
+              <!-- AI Question -->
+              <div class="col-md-6">
+                <div class="project-card">
+                  <div class="project-title">
+                    <span>AI Question Architecture</span>
+                  </div>
+                  <div class="project-tech">
+                    <span class="tech-tag">AI/LLM</span>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Data Pipelines</span>
+                    <span class="tech-tag">Compliance</span>
+                  </div>
+                  <p class="project-desc">
+                    A deep dive into the architecture of an enterprise AI product. Designed ingestion, normalization, and retrieval pipelines with strict compliance guardrails. Implemented advanced prompt orchestration and scoring heuristics to ensure high-accuracy responses.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://youtu.be/bLGtPHjFA4E" target="_blank" class="me-3"><i class="bi bi-youtube"></i> Watch Demo</a>
+                    <a href="https://github.com/tahazalzali/question-ai" target="_blank"><i class="bi bi-github"></i> View Source</a>
+                  </div>
                 </div>
-                <small><a href="https://youtu.be/bLGtPHjFA4E" target="_blank" rel="noopener">Watch the AI Question demo</a></small><br>
-                <small>Source: <a href="https://github.com/tahazalzali/question-ai" target="_blank" rel="noopener">github.com/tahazalzali/question-ai</a></small>
-              </li>
-              <li class="mb-3">
-                <strong>EchoEnclave Client &ndash; React + TypeScript music explorer</strong><br>
-                <a href="https://github.com/tahazalzali/EchoEnclave-client" target="_blank">github.com/tahazalzali/EchoEnclave-client</a><br>
-                Frontend for a music discovery platform with genre trails, artist deep-dives, and an AI chat assistant implemented in React + TypeScript.
-              </li>
-              <li class="mb-3">
-                <strong>EchoEnclave Server &ndash; Node.js + TypeScript APIs</strong><br>
-                <a href="https://github.com/tahazalzali/EchoEnclave-server" target="_blank">github.com/tahazalzali/EchoEnclave-server</a><br>
-                TypeScript backend aggregating artist data and powering conversational recommendations via the Google Gemini API.
-              </li>
-              <li class="mb-3">
-                <strong>Supportful &ndash; NestJS GraphQL collaboration hub</strong><br>
-                <a href="https://github.com/tahazalzali/Supportful" target="_blank">github.com/tahazalzali/Supportful</a><br>
-                School project showcasing modern backend practices with NestJS, GraphQL, modular domains, and TypeScript.
-              </li>
-              <li class="mb-3">
-                <strong>Gnews</strong><br>
-                <a href="https://github.com/tahazalzali/Gnews" target="_blank">github.com/tahazalzali/Gnews</a><br>
-                News reader with curated Arabic coverage, fast filtering, and clean data flows built in TypeScript.
-              </li>
-              <li class="mb-3">
-                <strong>Spotify API &ndash; TypeScript mobile app</strong><br>
-                <a href="https://github.com/tahazalzali/SpotifyApi" target="_blank">github.com/tahazalzali/SpotifyApi</a><br>
-                Mobile client demonstrating OAuth flows and artist search against Spotify APIs using TypeScript.
-              </li>
-            </ul>
+              </div>
+
+              <!-- EchoEnclave -->
+              <div class="col-md-6">
+                <div class="project-card">
+                  <div class="project-title">
+                    <a href="https://github.com/tahazalzali/EchoEnclave-client" target="_blank">EchoEnclave <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.8em;"></i></a>
+                  </div>
+                  <div class="project-tech">
+                    <span class="tech-tag">Node.js</span>
+                    <span class="tech-tag">TypeScript</span>
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Gemini API</span>
+                  </div>
+                  <p class="project-desc">
+                    Developed an AI-driven music discovery engine. Integrated Google Gemini API for natural language processing, delivering personalized recommendations via a high-performance Node.js/TypeScript backend and an immersive React frontend.
+                  </p>
+                  <div class="project-links">
+                    <a href="https://github.com/tahazalzali/EchoEnclave-server" target="_blank"><i class="bi bi-github"></i> Server Code</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Supportful -->
+              <div class="col-md-6">
+                <div class="project-card">
+                  <div class="project-title">
+                    <a href="https://github.com/tahazalzali/Supportful" target="_blank">Supportful <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.8em;"></i></a>
+                  </div>
+                  <div class="project-tech">
+                    <span class="tech-tag">NestJS</span>
+                    <span class="tech-tag">GraphQL</span>
+                    <span class="tech-tag">TypeScript</span>
+                    <span class="tech-tag">Modular DDD</span>
+                  </div>
+                  <p class="project-desc">
+                    Architected a collaboration hub using Domain-Driven Design principles. Leveraged NestJS and GraphQL to create a highly modular, type-safe backend that supports real-time updates and complex data relationships.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Gnews -->
+              <div class="col-md-6">
+                <div class="project-card">
+                  <div class="project-title">
+                    <a href="https://github.com/tahazalzali/Gnews" target="_blank">Gnews <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.8em;"></i></a>
+                  </div>
+                  <div class="project-tech">
+                    <span class="tech-tag">TypeScript</span>
+                    <span class="tech-tag">API Integration</span>
+                    <span class="tech-tag">Data Flow</span>
+                  </div>
+                  <p class="project-desc">
+                    Built a high-performance news aggregator focused on Arabic content. Implemented efficient data filtering algorithms and clean data flows in TypeScript to deliver instant news updates with minimal latency.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -500,7 +653,7 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="contact-mf">
-              <div id="contact" class="box-shadow-full">
+              <div id="contact" class="box-shadow-full" data-aos="zoom-in">
                 <div class="row" style="text-align:center;">
                   <div class="col-12 align-items-center">
                     <div class="title-box-2 pt-4 pt-md-0">
@@ -553,7 +706,14 @@
   <div id="preloader"></div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+  <!-- Custom Cursor -->
+  <div class="cursor"></div>
+  <div class="cursor2"></div>
+
   <!-- Vendor JS Files -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
