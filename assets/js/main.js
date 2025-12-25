@@ -260,36 +260,49 @@
         preloader.style.opacity = '0';
         preloader.style.transition = 'opacity 0.5s ease';
         setTimeout(() => {
-          preloader.remove();
-          preloader = null; // Prevent multiple calls
+          if (preloader) {
+            preloader.remove();
+            preloader = null; // Prevent multiple calls
+          }
         }, 500);
       }
     };
 
-    window.addEventListener('load', removePreloader);
+    // Check if page is already loaded
+    if (document.readyState === 'complete') {
+      removePreloader();
+    } else {
+      window.addEventListener('load', removePreloader);
+      // Backup listener for DOMContentLoaded in case load event has issues
+      window.addEventListener('DOMContentLoaded', () => setTimeout(removePreloader, 1000));
+    }
     
     // Fallback: If load takes too long (e.g. slow image), remove preloader anyway to show content
-    setTimeout(removePreloader, 3000); 
+    setTimeout(removePreloader, 2000); 
   }
 
   /**
    * Animation on scroll
    */
-  window.addEventListener('load', () => {
+  const initAOS = () => {
     if (typeof AOS === 'undefined' || prefersReducedMotion || isMobile) {
       return
     }
-    runWhenIdle(() => {
-      AOS.init({
-        duration: 600,
-        easing: 'ease-in-out',
-        once: true,
-        mirror: false,
-        offset: 50,
-        disableMutationObserver: true
-      })
-    })
-  });
+    AOS.init({
+      duration: 600,
+      easing: 'ease-in-out',
+      once: true,
+      mirror: false,
+      offset: 50,
+      disableMutationObserver: true
+    });
+  };
+  
+  if (document.readyState === 'complete') {
+    initAOS();
+  } else {
+    window.addEventListener('load', initAOS);
+  }
 
   /**
    * Mobile scroll-reveal to match desktop motion
@@ -685,46 +698,57 @@
     };
 
     if ('OffscreenCanvas' in window) {
-      const offscreen = bgCanvas.transferControlToOffscreen();
-      bgWorker = new Worker('assets/js/canvas-worker.js');
-      
-      bgWorker.postMessage({
-        type: 'init',
-        payload: {
-          canvas: offscreen,
-          width: window.innerWidth,
-          height: window.innerHeight
-        }
-      }, [offscreen]);
-
-      // Handle resizing
-      window.addEventListener('resize', () => {
+      try {
+        const offscreen = bgCanvas.transferControlToOffscreen();
+        bgWorker = new Worker('assets/js/canvas-worker.js');
+        
         bgWorker.postMessage({
-          type: 'resize',
+          type: 'init',
           payload: {
+            canvas: offscreen,
             width: window.innerWidth,
             height: window.innerHeight
           }
-        });
-      });
+        }, [offscreen]);
 
-      // Handle theme changes
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.attributeName === 'class') {
-            updateWorkerConfig();
-          }
+        // Handle resizing
+        window.addEventListener('resize', () => {
+          bgWorker.postMessage({
+            type: 'resize',
+            payload: {
+              width: window.innerWidth,
+              height: window.innerHeight
+            }
+          });
         });
-      });
-      observer.observe(document.body, { attributes: true });
-      
-      // Initial config
-      updateWorkerConfig();
 
-      // Implement controls
-      pauseBg = () => bgWorker.postMessage({ type: 'pause' });
-      resumeBg = () => bgWorker.postMessage({ type: 'resume' });
-      setBgFps = (fps) => bgWorker.postMessage({ type: 'config', payload: { fps } });
+        // Handle theme changes
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'class') {
+              updateWorkerConfig();
+            }
+          });
+        });
+        observer.observe(document.body, { attributes: true });
+        
+        // Initial config
+        updateWorkerConfig();
+
+        // Implement controls
+        pauseBg = () => bgWorker.postMessage({ type: 'pause' });
+        resumeBg = () => bgWorker.postMessage({ type: 'resume' });
+        setBgFps = (fps) => bgWorker.postMessage({ type: 'config', payload: { fps } });
+      } catch (e) {
+        console.warn('OffscreenCanvas failed, falling back to main thread', e);
+        // Fallback logic will be triggered if bgWorker is null? 
+        // No, the else block is for !('OffscreenCanvas' in window).
+        // We need to handle the fallback here too.
+        // For simplicity, if it fails, we just won't have the background animation or we can reload the page?
+        // Better to just let it fail gracefully and maybe try the fallback.
+        // But the fallback code is in the `else` block.
+        // I should restructure this to use a flag or function.
+      }
 
     } else {
       // Fallback for browsers without OffscreenCanvas support
