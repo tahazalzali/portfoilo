@@ -472,10 +472,10 @@
     scrollStopTimer = setTimeout(() => {
       isScrolling = false;
       resumeCursor();
-      resumeBg();
+      // Background animation continues during scroll, so no need to resume
     }, 120);
     pauseCursor();
-    pauseBg();
+    // Background animation continues during scroll
   }, { passive: true });
 
   document.addEventListener('visibilitychange', () => {
@@ -690,19 +690,19 @@
         return;
       }
       lastBgFrame = timestamp;
-      if (isScrolling) {
-        bgRafId = requestAnimationFrame(drawBg);
-        return;
-      }
+      
+      // Removed isScrolling check to keep animation running during scroll
+      
       // Translucent black background to create trail effect
       // Use theme background color for trail effect
       const style = getComputedStyle(document.body);
       const isLight = document.body.classList.contains('theme-light');
       
       if (isLight) {
-         bgCtx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+         bgCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
       } else {
-         bgCtx.fillStyle = 'rgba(17, 17, 17, 0.05)';
+         // Dark mode: slightly higher opacity for cleaner trails (less muddy)
+         bgCtx.fillStyle = 'rgba(17, 17, 17, 0.1)';
       }
       
       bgCtx.fillRect(0, 0, bgWidth, bgHeight);
@@ -710,7 +710,8 @@
       const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
       
       // Adjust opacity for light theme visibility
-      const opacity = isLight ? '0.8' : '0.25';
+      // Dark mode: increased from 0.25 to 0.4 for better clarity
+      const opacity = '0.4';
       bgCtx.fillStyle = `rgba(${color}, ${opacity})`; 
       bgCtx.font = fontSize + 'px monospace';
 
