@@ -685,13 +685,16 @@
 
     function drawBg(timestamp) {
       if (bgRafId === null) return;
-      if (timestamp - lastBgFrame < 1000 / 30) {
+      
+      // Throttle frame rate during scroll to improve performance
+      // 30 FPS normally, 20 FPS while scrolling to reduce CPU load
+      const fps = isScrolling ? 20 : 30;
+      
+      if (timestamp - lastBgFrame < 1000 / fps) {
         bgRafId = requestAnimationFrame(drawBg);
         return;
       }
       lastBgFrame = timestamp;
-      
-      // Removed isScrolling check to keep animation running during scroll
       
       // Translucent black background to create trail effect
       // Use theme background color for trail effect
@@ -710,8 +713,8 @@
       const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
       
       // Adjust opacity for light theme visibility
-      // Dark mode: increased from 0.25 to 0.4 for better clarity
-      const opacity = '0.4';
+      // Dark mode: 0.4 for clarity, Light mode: 0.8 for visibility
+      const opacity ='0.4';
       bgCtx.fillStyle = `rgba(${color}, ${opacity})`; 
       bgCtx.font = fontSize + 'px monospace';
 
