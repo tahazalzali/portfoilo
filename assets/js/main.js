@@ -254,9 +254,22 @@
    */
   let preloader = select('#preloader');
   if (preloader) {
-    window.addEventListener('load', () => {
-      preloader.remove()
-    });
+    // Remove preloader on load or after a timeout (fallback for slow connections)
+    const removePreloader = () => {
+      if (preloader) {
+        preloader.style.opacity = '0';
+        preloader.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+          preloader.remove();
+          preloader = null; // Prevent multiple calls
+        }, 500);
+      }
+    };
+
+    window.addEventListener('load', removePreloader);
+    
+    // Fallback: If load takes too long (e.g. slow image), remove preloader anyway to show content
+    setTimeout(removePreloader, 3000); 
   }
 
   /**
@@ -533,7 +546,11 @@
       }
       
       draw() {
-        ctx.fillStyle = `rgba(77, 163, 255, ${this.life})`;
+        // Get color from CSS variable for theme support
+        const style = getComputedStyle(document.body);
+        const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
+        
+        ctx.fillStyle = `rgba(${color}, ${this.life})`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -586,7 +603,9 @@
         
         // Draw connecting lines (Constellation effect)
         // Only connect if close to cursor
-        ctx.strokeStyle = 'rgba(77, 163, 255, 0.1)';
+        const style = getComputedStyle(document.body);
+        const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
+        ctx.strokeStyle = `rgba(${color}, 0.1)`;
         ctx.lineWidth = 0.5;
         ctx.beginPath();
         for (let i = 0; i < particles.length; i++) {
@@ -626,13 +645,17 @@
     hoverElements.forEach(el => {
       el.addEventListener('mouseenter', () => {
         scale = 1.5;
-        cursorFollower.style.backgroundColor = 'rgba(77, 163, 255, 0.1)';
+        const style = getComputedStyle(document.body);
+        const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
+        cursorFollower.style.backgroundColor = `rgba(${color}, 0.1)`;
         cursorFollower.style.borderColor = 'transparent';
       });
       el.addEventListener('mouseleave', () => {
         scale = 1;
-        cursorFollower.style.backgroundColor = 'rgba(77, 163, 255, 0.15)';
-        cursorFollower.style.borderColor = 'rgba(77, 163, 255, 0.5)';
+        const style = getComputedStyle(document.body);
+        const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
+        cursorFollower.style.backgroundColor = `rgba(${color}, 0.15)`;
+        cursorFollower.style.borderColor = `rgba(${color}, 0.5)`;
       });
     });
   }
@@ -672,10 +695,23 @@
         return;
       }
       // Translucent black background to create trail effect
-      bgCtx.fillStyle = 'rgba(17, 17, 17, 0.05)';
+      // Use theme background color for trail effect
+      const style = getComputedStyle(document.body);
+      const isLight = document.body.classList.contains('theme-light');
+      
+      if (isLight) {
+         bgCtx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      } else {
+         bgCtx.fillStyle = 'rgba(17, 17, 17, 0.05)';
+      }
+      
       bgCtx.fillRect(0, 0, bgWidth, bgHeight);
 
-      bgCtx.fillStyle = 'rgba(77, 163, 255, 0.25)'; // Theme blue with low opacity
+      const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
+      
+      // Adjust opacity for light theme visibility
+      const opacity = isLight ? '0.8' : '0.25';
+      bgCtx.fillStyle = `rgba(${color}, ${opacity})`; 
       bgCtx.font = fontSize + 'px monospace';
 
       for (let i = 0; i < drops.length; i++) {

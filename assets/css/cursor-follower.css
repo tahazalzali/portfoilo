@@ -8,8 +8,8 @@
   left: 0;
   width: 40px;
   height: 40px;
-  background-color: rgba(77, 163, 255, 0.15); /* Matches the lighter blue link color */
-  border: 1px solid rgba(77, 163, 255, 0.5);
+  background-color: rgba(var(--cursor-color-rgb), 0.15);
+  border: 1px solid rgba(var(--cursor-color-rgb), 0.5);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
@@ -18,9 +18,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #4da3ff;
+  color: var(--cursor-text-color);
   font-size: 16px;
-  box-shadow: 0 0 15px rgba(77, 163, 255, 0.2);
+  box-shadow: 0 0 15px rgba(var(--cursor-color-rgb), 0.2);
   will-change: transform; /* Performance optimization */
 }
 
@@ -50,9 +50,9 @@
 }
 
 @keyframes pulse-glow {
-  0% { text-shadow: 0 0 2px rgba(77, 163, 255, 0.5); }
-  50% { text-shadow: 0 0 10px rgba(77, 163, 255, 0.8); }
-  100% { text-shadow: 0 0 2px rgba(77, 163, 255, 0.5); }
+  0% { text-shadow: 0 0 2px rgba(var(--cursor-color-rgb), 0.5); }
+  50% { text-shadow: 0 0 10px rgba(var(--cursor-color-rgb), 0.8); }
+  100% { text-shadow: 0 0 2px rgba(var(--cursor-color-rgb), 0.5); }
 }
 
 /* Hide on touch devices */

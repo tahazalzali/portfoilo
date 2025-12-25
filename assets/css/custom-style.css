@@ -1,30 +1,114 @@
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
 
-/*--------------------------------------------------------------
-# Modern UI Overrides & Enhancements
---------------------------------------------------------------*/
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 5px;
+  border: 2px solid #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0078ff;
+}
+
+/* Modern UI Overrides & Enhancements */
+
+:root {
+  /* Default Dark Theme */
+  --bg-color: #111;
+  --text-color: #f5f5f5;
+  --heading-color: #fff;
+  --link-color: #4da3ff;
+  --link-hover-color: #fff;
+  
+  --card-bg: #1a1a1a;
+  --card-border: rgba(255,255,255,0.05);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  
+  --skill-bg: #2a2a2a;
+  --skill-text: #ddd;
+  --skill-border: rgba(255,255,255,0.1);
+  
+  --project-card-bg: #1a1a1a;
+  --project-card-border: rgba(255, 255, 255, 0.05);
+  
+  --tech-tag-bg: rgba(0, 120, 255, 0.1);
+  --tech-tag-text: #4da3ff;
+  --tech-tag-border: rgba(0, 120, 255, 0.2);
+  
+  --text-muted: #888;
+  --text-secondary: #ccc;
+  
+  --navbar-scrolled-bg: rgba(20, 20, 20, 0.9);
+  --navbar-link-color: #fff;
+
+  --cursor-color-rgb: 77, 163, 255;
+  --cursor-text-color: #4da3ff;
+}
+
+body.theme-light {
+  /* Light Theme Overrides */
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --heading-color: #111111;
+  --link-color: #0078ff;
+  --link-hover-color: #0056b3;
+  
+  --card-bg: #ffffff;
+  --card-border: rgba(0,0,0,0.1);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  
+  --skill-bg: #f0f0f0;
+  --skill-text: #333;
+  --skill-border: rgba(0,0,0,0.1);
+  
+  --project-card-bg: #ffffff;
+  --project-card-border: rgba(0, 0, 0, 0.1);
+  
+  --tech-tag-bg: rgba(0, 120, 255, 0.1);
+  --tech-tag-text: #0056b3;
+  --tech-tag-border: rgba(0, 120, 255, 0.2);
+  
+  --text-muted: #666;
+  --text-secondary: #555;
+  
+  --navbar-scrolled-bg: rgba(255, 255, 255, 0.9);
+  --navbar-link-color: #333;
+
+  --cursor-color-rgb: 0, 120, 255;
+  --cursor-text-color: #0078ff;
+}
 
 /* Global Typography */
 body {
   font-family: 'Poppins', sans-serif;
-  color: #f5f5f5;
-  background-color: #111;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  transition: background-color 0.6s ease, color 0.6s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  color: #fff;
+  color: var(--heading-color);
+  transition: color 0.6s ease;
 }
 
-/* Global Link Styling for Dark Mode */
+/* Global Link Styling */
 a {
-  color: #4da3ff; /* Lighter blue for better contrast on dark */
+  color: var(--link-color);
   transition: all 0.3s ease;
   text-decoration: none;
 }
 
 a:hover {
-  color: #fff;
+  color: var(--link-hover-color);
   text-shadow: 0 0 8px rgba(77, 163, 255, 0.6);
   text-decoration: none;
 }
@@ -32,6 +116,7 @@ a:hover {
 /* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Account for fixed header */
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -58,24 +143,33 @@ html {
 }
 
 #header.header-scrolled {
-  background: rgba(20, 20, 20, 0.9);
+  background: var(--navbar-scrolled-bg);
   backdrop-filter: blur(10px);
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
   padding: 12px 0;
 }
 
 .navbar a {
   font-weight: 500;
-  color: #fff !important;
+  color: var(--navbar-link-color) !important;
+  transition: color 0.3s ease;
 }
 
 .navbar .active, .navbar .active:focus, .navbar li:hover > a {
   color: #0078ff !important;
 }
 
+/* Preloader Dark Mode Override */
+#preloader {
+  background: #111 !important; /* Match default dark theme */
+  z-index: 99999; /* Ensure it's on top of everything */
+}
+
 /* Hero Section Enhancements */
 .hero {
   position: relative;
+  background-color: #111; /* Fallback color for slow connections */
+  height: 100vh; /* Ensure full height immediately */
 }
 
 .overlay-itro {
@@ -86,43 +180,46 @@ html {
   font-size: 3.5rem;
   font-weight: 700;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-  color: #fff;
+  color: #fff; /* Always white on hero image */
 }
 
 .hero-subtitle {
   font-size: 1.5rem;
   font-weight: 300;
-  color: #ddd;
+  color: #ddd; /* Always light on hero image */
 }
 
 /* About Section & Skills */
 .about-mf .box-shadow-full {
   border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255,255,255,0.05);
-  background-color: #1a1a1a;
-  color: #ddd;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--card-border);
+  background-color: var(--card-bg);
+  color: var(--text-secondary);
+  transition: background-color 0.6s ease, border-color 0.6s ease, color 0.6s ease, box-shadow 0.6s ease;
 }
 
 .title-s {
-  color: #fff;
+  color: var(--heading-color);
   font-weight: 600;
+  transition: color 0.6s ease;
 }
 
 .about-me .lead {
-  color: #ccc;
+  color: var(--text-secondary);
+  transition: color 0.6s ease;
 }
 
 .skill-mf ul li {
   display: inline-block;
   margin: 5px 5px 5px 0;
   padding: 8px 16px;
-  background: #2a2a2a;
+  background: var(--skill-bg);
   border-radius: 50px;
   font-size: 0.9rem;
-  color: #ddd;
+  color: var(--skill-text);
   transition: all 0.3s ease;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--skill-border);
 }
 
 .skill-mf ul li:hover {
@@ -144,10 +241,10 @@ html {
 .work-box {
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  background: #1a1a1a;
-  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.6s ease, border-color 0.6s ease;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
 }
 
 .work-box:hover {
@@ -155,8 +252,16 @@ html {
   box-shadow: 0 15px 30px rgba(0, 120, 255, 0.15);
 }
 
+.work-img {
+  background-color: #2a2a2a; /* Placeholder color while image loads */
+  overflow: hidden; /* Ensure zoom effect stays inside */
+}
+
 .work-img img {
   transition: all 1s;
+  width: 100%; /* Ensure it fills the container */
+  height: auto;
+  display: block; /* Remove bottom space */
 }
 
 .work-box:hover .work-img img {
@@ -170,12 +275,14 @@ html {
 .w-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--heading-color);
+  transition: color 0.6s ease;
 }
 
 .w-more {
-  color: #aaa;
+  color: var(--text-muted);
   font-size: 0.9rem;
+  transition: color 0.6s ease;
 }
 
 .w-like a {
@@ -184,7 +291,8 @@ html {
 }
 
 .text-muted {
-  color: #888 !important;
+  color: var(--text-muted) !important;
+  transition: color 0.6s ease;
 }
 
 /* Contact Section */
@@ -452,8 +560,9 @@ html {
 }
 
 .title-box-2 .title-left {
-  color: #fff;
+  color: var(--heading-color);
   position: relative;
+  transition: color 0.6s ease;
 }
 
 .title-box-2 .title-left:before {
@@ -476,11 +585,13 @@ html {
 
 /* Section Titles */
 .title-box .title-a {
-  color: #fff;
+  color: var(--heading-color);
+  transition: color 0.6s ease;
 }
 
 .title-box .subtitle-a {
-  color: #aaa;
+  color: var(--text-muted);
+  transition: color 0.6s ease;
 }
 
 .line-mf {
@@ -489,16 +600,19 @@ html {
 
 /* Blog/Projects Section */
 .card-blog {
-  background: #1a1a1a;
-  border: 1px solid rgba(255,255,255,0.05);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  transition: background-color 0.6s ease, border-color 0.6s ease;
 }
 
 .card-blog .card-title {
-  color: #fff;
+  color: var(--heading-color);
+  transition: color 0.6s ease;
 }
 
 .card-blog .card-description {
-  color: #ccc;
+  color: var(--text-secondary);
+  transition: color 0.6s ease;
 }
 
 /* Enhanced Link Visibility in Content Areas */
@@ -522,13 +636,21 @@ html {
 
 /* Specific tweak for the Projects list to make URLs pop */
 .list-unstyled li a {
-  color: #4da3ff;
+  color: var(--link-color);
   word-break: break-all; /* Ensure long URLs don't break layout */
 }
 
 .list-unstyled li strong {
-  color: #fff;
+  color: var(--heading-color);
   font-size: 1.05rem;
+  transition: color 0.6s ease;
+}
+
+/* Section Subheadings */
+.section-subheading {
+  color: var(--heading-color);
+  border-color: var(--card-border) !important;
+  transition: color 0.6s ease, border-color 0.6s ease;
 }
 
 /* Particles Container */
@@ -607,12 +729,12 @@ body.has-custom-cursor textarea {
 
 /* Project Cards - Attractive UI/UX */
 .project-card {
-  background: #1a1a1a;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--project-card-bg);
+  border: 1px solid var(--project-card-border);
   border-radius: 12px;
   padding: 1.5rem;
   height: 100%;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease, background-color 0.6s ease, border-color 0.6s ease;
   position: relative;
   overflow: hidden;
   will-change: transform;
@@ -643,16 +765,18 @@ body.has-custom-cursor textarea {
 .project-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--heading-color);
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: color 0.6s ease;
 }
 
 .project-title a {
-  color: #fff;
+  color: var(--heading-color);
   text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .project-title a:hover {
@@ -669,23 +793,25 @@ body.has-custom-cursor textarea {
 .tech-tag {
   font-size: 0.75rem;
   padding: 4px 10px;
-  background: rgba(0, 120, 255, 0.1);
-  color: #4da3ff;
+  background: var(--tech-tag-bg);
+  color: var(--tech-tag-text);
   border-radius: 20px;
   font-weight: 500;
-  border: 1px solid rgba(0, 120, 255, 0.2);
+  border: 1px solid var(--tech-tag-border);
+  transition: all 0.3s ease;
 }
 
 .project-desc {
   font-size: 0.95rem;
-  color: #ccc;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 1rem;
+  transition: color 0.6s ease;
 }
 
 .project-links a {
   font-size: 0.9rem;
-  color: #888;
+  color: var(--text-muted);
   transition: color 0.2s;
   display: inline-flex;
   align-items: center;
@@ -740,3 +866,4 @@ footer {
     transform: translateY(0);
   }
 }
+ 
