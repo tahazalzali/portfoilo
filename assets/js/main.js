@@ -463,14 +463,17 @@
   let resumeCursor = () => {};
   let pauseBg = () => {};
   let resumeBg = () => {};
+  let setBgFps = () => {};
 
   let isScrolling = false;
   let scrollStopTimer;
   window.addEventListener('scroll', () => {
     isScrolling = true;
+    setBgFps(20);
     clearTimeout(scrollStopTimer);
     scrollStopTimer = setTimeout(() => {
       isScrolling = false;
+      setBgFps(30);
       resumeCursor();
       // Background animation continues during scroll, so no need to resume
     }, 120);
@@ -665,97 +668,151 @@
    */
   const bgCanvas = document.getElementById('global-canvas');
   if (bgCanvas && !prefersReducedMotion && !isMobile) {
-    const bgCtx = bgCanvas.getContext('2d');
-    let bgWidth = window.innerWidth;
-    let bgHeight = window.innerHeight;
-    let bgRafId = null;
-    let lastBgFrame = 0;
-    
-    bgCanvas.width = bgWidth;
-    bgCanvas.height = bgHeight;
+    let bgWorker = null;
 
-    const chars = '01<>/{}';
-    const fontSize = 14;
-    const columns = bgWidth / fontSize;
-    const drops = [];
-
-    for (let x = 0; x < columns; x++) {
-      drops[x] = 1;
-    }
-
-    function drawBg(timestamp) {
-      if (bgRafId === null) return;
-      
-      // Throttle frame rate during scroll to improve performance
-      // 30 FPS normally, 20 FPS while scrolling to reduce CPU load
-      const fps = isScrolling ? 20 : 30;
-      
-      if (timestamp - lastBgFrame < 1000 / fps) {
-        bgRafId = requestAnimationFrame(drawBg);
-        return;
-      }
-      lastBgFrame = timestamp;
-      
-      // Translucent black background to create trail effect
-      // Use theme background color for trail effect
+    const updateWorkerConfig = () => {
+      if (!bgWorker) return;
       const style = getComputedStyle(document.body);
-      const isLight = document.body.classList.contains('theme-light');
-      
-      if (isLight) {
-         bgCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-      } else {
-         // Dark mode: slightly higher opacity for cleaner trails (less muddy)
-         bgCtx.fillStyle = 'rgba(17, 17, 17, 0.1)';
-      }
-      
-      bgCtx.fillRect(0, 0, bgWidth, bgHeight);
-
       const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
-      
-      // Adjust opacity for light theme visibility
-      // Dark mode: 0.4 for clarity, Light mode: 0.8 for visibility
-      const opacity ='0.4';
-      bgCtx.fillStyle = `rgba(${color}, ${opacity})`; 
-      bgCtx.font = fontSize + 'px monospace';
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = chars.charAt(Math.floor(Math.random() * chars.length));
-        bgCtx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > bgHeight && Math.random() > 0.975) {
-          drops[i] = 0;
+      const isLight = document.body.classList.contains('theme-light');
+      bgWorker.postMessage({
+        type: 'config',
+        payload: {
+          isLight,
+          color
         }
-        drops[i]++;
-      }
-      bgRafId = requestAnimationFrame(drawBg);
-    }
+      });
+    };
 
-    const startBgAnimation = () => {
-      if (bgRafId !== null) return;
-      bgRafId = requestAnimationFrame(drawBg);
-    };
-    pauseBg = () => {
-      if (bgRafId === null) return;
-      cancelAnimationFrame(bgRafId);
-      bgRafId = null;
-    };
-    resumeBg = () => {
-      startBgAnimation();
-    };
-    runWhenIdle(startBgAnimation, 2000);
+    if ('OffscreenCanvas' in window) {
+      const offscreen = bgCanvas.transferControlToOffscreen();
+      bgWorker = new Worker('assets/js/canvas-worker.js');
+      
+      bgWorker.postMessage({
+        type: 'init',
+        payload: {
+          canvas: offscreen,
+          width: window.innerWidth,
+          height: window.innerHeight
+        }
+      }, [offscreen]);
 
-    window.addEventListener('resize', () => {
-      bgWidth = window.innerWidth;
-      bgHeight = window.innerHeight;
+      // Handle resizing
+      window.addEventListener('resize', () => {
+        bgWorker.postMessage({
+          type: 'resize',
+          payload: {
+            width: window.innerWidth,
+            height: window.innerHeight
+          }
+        });
+      });
+
+      // Handle theme changes
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'class') {
+            updateWorkerConfig();
+          }
+        });
+      });
+      observer.observe(document.body, { attributes: true });
+      
+      // Initial config
+      updateWorkerConfig();
+
+      // Implement controls
+      pauseBg = () => bgWorker.postMessage({ type: 'pause' });
+      resumeBg = () => bgWorker.postMessage({ type: 'resume' });
+      setBgFps = (fps) => bgWorker.postMessage({ type: 'config', payload: { fps } });
+
+    } else {
+      // Fallback for browsers without OffscreenCanvas support
+      const bgCtx = bgCanvas.getContext('2d');
+      let bgWidth = window.innerWidth;
+      let bgHeight = window.innerHeight;
+      let bgRafId = null;
+      let lastBgFrame = 0;
+      let fps = 30;
+      
       bgCanvas.width = bgWidth;
       bgCanvas.height = bgHeight;
-      // Re-init drops
-      const newColumns = bgWidth / fontSize;
-      drops.length = 0;
-      for (let x = 0; x < newColumns; x++) {
+
+      const chars = '01<>/{}';
+      const fontSize = 14;
+      const columns = bgWidth / fontSize;
+      const drops = [];
+
+      for (let x = 0; x < columns; x++) {
         drops[x] = 1;
       }
-    });
+
+      function drawBg(timestamp) {
+        if (bgRafId === null) return;
+        
+        if (timestamp - lastBgFrame < 1000 / fps) {
+          bgRafId = requestAnimationFrame(drawBg);
+          return;
+        }
+        lastBgFrame = timestamp;
+        
+        const style = getComputedStyle(document.body);
+        const isLight = document.body.classList.contains('theme-light');
+        
+        if (isLight) {
+           bgCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        } else {
+           bgCtx.fillStyle = 'rgba(17, 17, 17, 0.1)';
+        }
+        
+        bgCtx.fillRect(0, 0, bgWidth, bgHeight);
+
+        const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
+        const opacity = isLight ? '0.8' : '0.4';
+        bgCtx.fillStyle = `rgba(${color}, ${opacity})`; 
+        bgCtx.font = fontSize + 'px monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+          const text = chars.charAt(Math.floor(Math.random() * chars.length));
+          bgCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > bgHeight && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+        bgRafId = requestAnimationFrame(drawBg);
+      }
+
+      const startBgAnimation = () => {
+        if (bgRafId !== null) return;
+        bgRafId = requestAnimationFrame(drawBg);
+      };
+      
+      pauseBg = () => {
+        if (bgRafId === null) return;
+        cancelAnimationFrame(bgRafId);
+        bgRafId = null;
+      };
+      resumeBg = () => {
+        startBgAnimation();
+      };
+      setBgFps = (newFps) => { fps = newFps; };
+      
+      runWhenIdle(startBgAnimation, 2000);
+
+      window.addEventListener('resize', () => {
+        bgWidth = window.innerWidth;
+        bgHeight = window.innerHeight;
+        bgCanvas.width = bgWidth;
+        bgCanvas.height = bgHeight;
+        const newColumns = bgWidth / fontSize;
+        drops.length = 0;
+        for (let x = 0; x < newColumns; x++) {
+          drops[x] = 1;
+        }
+      });
+    }
   }
 
 })()
