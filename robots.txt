@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Disallow admin or private directories if you have any
+Disallow: /assets/css/
+Disallow: /assets/js/
+Disallow: /assets/vendor/
+
+# Explicitly disallow the certificates folder to prevent indexing of PDF files
+Disallow: /certificates/
+
+Sitemap: https://portfoilo-khaki.vercel.app/sitemap.xml
