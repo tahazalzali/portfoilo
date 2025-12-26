@@ -11,140 +11,84 @@
   <link href="media/tahaLogo.jpg" rel="icon">
   <link href="media/tahaLogo.jpg" rel="apple-touch-icon">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
-
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
   
   <style>
     body {
-      background-color: #1e1e1e; /* VS Code Dark Background */
-      color: #d4d4d4;
-      font-family: 'Fira Code', monospace;
+      background-color: #f5f5f5;
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0;
-      overflow: hidden;
+      font-family: "Poppins", sans-serif;
     }
 
-    .terminal-window {
-      background-color: #252526;
-      width: 80%;
-      max-width: 800px;
-      border-radius: 8px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-      overflow: hidden;
-      border: 1px solid #333;
+    .error-container {
+      text-align: center;
+      padding: 40px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      max-width: 600px;
+      width: 90%;
     }
 
-    .terminal-header {
-      background-color: #333;
-      padding: 10px 15px;
-      display: flex;
-      align-items: center;
+    .error-code {
+      font-size: 8rem;
+      font-weight: 700;
+      color: #0078ff;
+      line-height: 1;
+      margin-bottom: 10px;
     }
 
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin-right: 8px;
+    .error-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #1e1e1e;
+      margin-bottom: 15px;
     }
 
-    .red { background-color: #ff5f56; }
-    .yellow { background-color: #ffbd2e; }
-    .green { background-color: #27c93f; }
-
-    .terminal-title {
-      margin-left: 15px;
-      color: #999;
-      font-size: 0.9rem;
-    }
-
-    .terminal-body {
-      padding: 30px;
+    .error-message {
       font-size: 1.1rem;
-      line-height: 1.6;
+      color: #4e4e4e;
+      margin-bottom: 30px;
     }
 
-    .keyword { color: #569cd6; } /* Blue */
-    .variable { color: #9cdcfe; } /* Light Blue */
-    .string { color: #ce9178; } /* Orange/Red */
-    .function { color: #dcdcaa; } /* Yellow */
-    .comment { color: #6a9955; } /* Green */
-    .number { color: #b5cea8; } /* Light Green */
-
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      height: 1.2em;
-      background-color: #d4d4d4;
-      animation: blink 1s step-end infinite;
-      vertical-align: middle;
-      margin-left: 5px;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .btn-return {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
+    .btn-home {
       background-color: #0078ff;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.9rem;
-      transition: background-color 0.3s;
+      color: #fff;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .btn-return:hover {
-      background-color: #0056b3;
-      color: white;
+    .btn-home:hover {
+      background-color: #0062d3;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 120, 255, 0.3);
     }
   </style>
 </head>
 
 <body>
 
-  <div class="terminal-window">
-    <div class="terminal-header">
-      <div class="dot red"></div>
-      <div class="dot yellow"></div>
-      <div class="dot green"></div>
-      <div class="terminal-title">404.js — portfolio</div>
-    </div>
-    <div class="terminal-body">
-      <p>
-        <span class="keyword">const</span> <span class="variable">pageStatus</span> = <span class="number">404</span>;
-      </p>
-      <p>
-        <span class="keyword">if</span> (<span class="variable">pageStatus</span> === <span class="number">404</span>) {
-      </p>
-      <p style="padding-left: 20px;">
-        <span class="variable">console</span>.<span class="function">error</span>(<span class="string">"Oops! Page not found."</span>);
-      </p>
-      <p style="padding-left: 20px;">
-        <span class="comment">// The requested URL was not found on this server.</span>
-      </p>
-      <p style="padding-left: 20px;">
-        <span class="function">returnHome</span>();<span class="cursor"></span>
-      </p>
-      <p>
-        }
-      </p>
-      
-      <div class="mt-4">
-        <a href="index.html" class="btn-return">> cd /home</a>
-      </div>
-    </div>
+  <div class="error-container">
+    <h1 class="error-code">404</h1>
+    <h2 class="error-title">Page Not Found</h2>
+    <p class="error-message">
+      The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+    </p>
+    <a href="index.html" class="btn btn-home">
+      <i class="bi bi-house-door-fill"></i> Back to Home
+    </a>
   </div>
 
 </body>
