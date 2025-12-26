@@ -4,46 +4,146 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>404 Not Found - Taha Zalzali</title>
-  <meta content="Page not found" name="description">
+  <title>404 Not Found | Taha Zalzali</title>
+  <meta content="Error 404: Page not found" name="description">
   
   <!-- Favicons -->
   <link href="media/tahaLogo.jpg" rel="icon">
   <link href="media/tahaLogo.jpg" rel="apple-touch-icon">
 
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/css/style.css" rel="stylesheet">
   
   <style>
-    .error-page {
+    body {
+      background-color: #1e1e1e; /* VS Code Dark Background */
+      color: #d4d4d4;
+      font-family: 'Fira Code', monospace;
       height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #f5f5f5;
-      text-align: center;
+      margin: 0;
+      overflow: hidden;
     }
-    .error-code {
-      font-size: 8rem;
-      font-weight: 700;
-      color: #0078ff;
+
+    .terminal-window {
+      background-color: #252526;
+      width: 80%;
+      max-width: 800px;
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      overflow: hidden;
+      border: 1px solid #333;
     }
-    .error-message {
-      font-size: 1.5rem;
-      margin-bottom: 2rem;
-      color: #4e4e4e;
+
+    .terminal-header {
+      background-color: #333;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .red { background-color: #ff5f56; }
+    .yellow { background-color: #ffbd2e; }
+    .green { background-color: #27c93f; }
+
+    .terminal-title {
+      margin-left: 15px;
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    .terminal-body {
+      padding: 30px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .keyword { color: #569cd6; } /* Blue */
+    .variable { color: #9cdcfe; } /* Light Blue */
+    .string { color: #ce9178; } /* Orange/Red */
+    .function { color: #dcdcaa; } /* Yellow */
+    .comment { color: #6a9955; } /* Green */
+    .number { color: #b5cea8; } /* Light Green */
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background-color: #d4d4d4;
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .btn-return {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #0078ff;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      transition: background-color 0.3s;
+    }
+
+    .btn-return:hover {
+      background-color: #0056b3;
+      color: white;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="error-page">
-    <div class="container">
-      <h1 class="error-code">404</h1>
-      <p class="error-message">Oops! The page you are looking for does not exist.</p>
-      <a href="index.html" class="btn btn-primary btn-lg">Back to Home</a>
+  <div class="terminal-window">
+    <div class="terminal-header">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+      <div class="terminal-title">404.js — portfolio</div>
+    </div>
+    <div class="terminal-body">
+      <p>
+        <span class="keyword">const</span> <span class="variable">pageStatus</span> = <span class="number">404</span>;
+      </p>
+      <p>
+        <span class="keyword">if</span> (<span class="variable">pageStatus</span> === <span class="number">404</span>) {
+      </p>
+      <p style="padding-left: 20px;">
+        <span class="variable">console</span>.<span class="function">error</span>(<span class="string">"Oops! Page not found."</span>);
+      </p>
+      <p style="padding-left: 20px;">
+        <span class="comment">// The requested URL was not found on this server.</span>
+      </p>
+      <p style="padding-left: 20px;">
+        <span class="function">returnHome</span>();<span class="cursor"></span>
+      </p>
+      <p>
+        }
+      </p>
+      
+      <div class="mt-4">
+        <a href="index.html" class="btn-return">> cd /home</a>
+      </div>
     </div>
   </div>
 
