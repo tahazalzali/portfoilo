@@ -40,6 +40,13 @@
     el.addEventListener('scroll', listener, { passive: true })
   }
 
+  // Animation control variables
+  let pauseCursor = () => {};
+  let resumeCursor = () => {};
+  let pauseBg = () => {};
+  let resumeBg = () => {};
+  let setBgFps = () => {};
+
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
@@ -698,49 +705,54 @@
     };
 
     if ('OffscreenCanvas' in window) {
-      try {
-        const offscreen = bgCanvas.transferControlToOffscreen();
-        bgWorker = new Worker('assets/js/canvas-worker.js');
-        
-        bgWorker.postMessage({
-          type: 'init',
-          payload: {
-            canvas: offscreen,
-            width: window.innerWidth,
-            height: window.innerHeight
-          }
-        }, [offscreen]);
-
-        // Handle resizing
-        window.addEventListener('resize', () => {
+      runWhenIdle(() => {
+        try {
+          const offscreen = bgCanvas.transferControlToOffscreen();
+          bgWorker = new Worker('assets/js/canvas-worker.js');
+          
           bgWorker.postMessage({
-            type: 'resize',
+            type: 'init',
             payload: {
+              canvas: offscreen,
               width: window.innerWidth,
               height: window.innerHeight
             }
-          });
-        });
+          }, [offscreen]);
 
-        // Handle theme changes
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            if (mutation.attributeName === 'class') {
-              updateWorkerConfig();
-            }
+          // Handle resizing
+          window.addEventListener('resize', () => {
+            bgWorker.postMessage({
+              type: 'resize',
+              payload: {
+                width: window.innerWidth,
+                height: window.innerHeight
+              }
+            });
           });
-        });
-        observer.observe(document.body, { attributes: true });
-        
-        // Initial config
-        updateWorkerConfig();
 
-        // Implement controls
-        pauseBg = () => bgWorker.postMessage({ type: 'pause' });
-        resumeBg = () => bgWorker.postMessage({ type: 'resume' });
-        setBgFps = (fps) => bgWorker.postMessage({ type: 'config', payload: { fps } });
-      } catch (e) {
-        console.warn('OffscreenCanvas failed, falling back to main thread', e);
+          // Handle theme changes
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.attributeName === 'class') {
+                updateWorkerConfig();
+              }
+            });
+          });
+          observer.observe(document.body, { attributes: true });
+          
+          // Initial config
+          updateWorkerConfig();
+
+          // Implement controls
+          pauseBg = () => bgWorker && bgWorker.postMessage({ type: 'pause' });
+          resumeBg = () => bgWorker && bgWorker.postMessage({ type: 'resume' });
+          setBgFps = (fps) => bgWorker && bgWorker.postMessage({ type: 'config', payload: { fps } });
+        } catch (e) {
+          console.warn('OffscreenCanvas failed, falling back to main thread', e);
+        }
+      });
+
+    } else {
         // Fallback logic will be triggered if bgWorker is null? 
         // No, the else block is for !('OffscreenCanvas' in window).
         // We need to handle the fallback here too.
