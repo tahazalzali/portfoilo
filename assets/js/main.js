@@ -504,7 +504,7 @@
     }
   });
 
-  if (!prefersReducedMotion && hasFinePointer) {
+  if (false && !prefersReducedMotion && hasFinePointer) { // Disabled for performance
     document.body.classList.add('has-custom-cursor');
     const cursorFollower = document.createElement('div');
     cursorFollower.classList.add('cursor-follower');
@@ -680,7 +680,7 @@
    * Global Background Animation - Digital Rain
    */
   const bgCanvas = document.getElementById('global-canvas');
-  if (bgCanvas && !prefersReducedMotion && !isMobile) {
+  if (false && bgCanvas && !prefersReducedMotion && !isMobile) { // Disabled for performance
     let bgWorker = null;
 
     const updateWorkerConfig = () => {
