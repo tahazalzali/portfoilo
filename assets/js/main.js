@@ -309,7 +309,7 @@
    */
   if (isMobile) {
     const revealTargets = document.querySelectorAll(
-      '.box-shadow-full, .work-box, .project-card, .service-box, .title-box, .about-info, .about-me, .hero-title, .hero-subtitle'
+      '.box-shadow-full, .work-box, .project-card, .service-box, .title-box, .about-info, .about-me, .hero-title, .hero-subtitle, [data-aos]'
     );
     revealTargets.forEach(el => el.classList.add('mobile-reveal'));
 
