@@ -9,4 +9,4 @@ Disallow: /assets/vendor/
 # Explicitly disallow the certificates folder to prevent indexing of PDF files
 Disallow: /certificates/
 
-Sitemap: https://portfoilo-khaki.vercel.app/sitemap.xml
+Sitemap: https://www.zalzali.tech/sitemap.xml
