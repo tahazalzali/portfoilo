@@ -133,12 +133,15 @@
   /**
    * Mobile nav dropdowns activate
    */
-  on('click', '.navbar .dropdown > a', function(e) {
+  document.addEventListener('click', function(e) {
     if (select('#navbar').classList.contains('navbar-mobile')) {
-      e.preventDefault()
-      this.nextElementSibling.classList.toggle('dropdown-active')
+      const dropdownLink = e.target.closest('.navbar .dropdown > a');
+      if (dropdownLink) {
+        e.preventDefault()
+        dropdownLink.nextElementSibling.classList.toggle('dropdown-active')
+      }
     }
-  }, true)
+  })
 
   /**
    * Scrool with ofset on links with a class name .scrollto
