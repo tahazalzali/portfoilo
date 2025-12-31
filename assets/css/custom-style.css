@@ -972,4 +972,32 @@ footer {
     transform: translateY(0);
   }
 }
+
+/* Performance: Content-visibility for off-screen sections */
+.portfolio-mf,
+.services-mf,
+.contact-mf {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .work-img::before {
+    animation: none;
+  }
+  
+  .work-img img {
+    transition: none;
+    opacity: 1;
+  }
+  
+  .work-box {
+    transition: box-shadow 0.4s ease, background-color 0.6s ease;
+  }
+  
+  .work-box:hover .work-img img {
+    transform: none;
+  }
+}
  

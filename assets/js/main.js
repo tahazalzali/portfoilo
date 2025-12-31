@@ -348,6 +348,72 @@
   }
 
   /**
+   * Enhanced Certificate/Portfolio Image Loading
+   * - Fade-in animation on load
+   * - Skeleton loading state removal
+   * - Eager preloading of nearby images
+   */
+  const initCertificateImageLoading = () => {
+    const workImages = document.querySelectorAll('.work-img img');
+    
+    // Handle each image
+    workImages.forEach(img => {
+      // If image is already loaded (cached), show immediately
+      if (img.complete && img.naturalHeight !== 0) {
+        img.classList.add('loaded');
+        img.closest('.work-img')?.classList.add('loaded');
+      } else {
+        // Add load event for images not yet loaded
+        img.addEventListener('load', function() {
+          this.classList.add('loaded');
+          this.closest('.work-img')?.classList.add('loaded');
+        }, { once: true });
+        
+        // Handle error gracefully
+        img.addEventListener('error', function() {
+          this.classList.add('loaded'); // Still remove skeleton
+          console.warn('Failed to load certificate image:', this.src);
+        }, { once: true });
+      }
+    });
+
+    // Preload images that are about to come into view (aggressive preloading)
+    if ('IntersectionObserver' in window) {
+      const preloadObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            const container = img.closest('.work-box');
+            const lightboxLink = container?.querySelector('a.portfolio-lightbox');
+            
+            // Preload the full-size image for lightbox when thumbnail is visible
+            if (lightboxLink) {
+              const fullSizeUrl = lightboxLink.getAttribute('href');
+              if (fullSizeUrl && fullSizeUrl !== img.src) {
+                const preloadImg = new Image();
+                preloadImg.src = fullSizeUrl;
+              }
+            }
+            observer.unobserve(img);
+          }
+        });
+      }, { 
+        rootMargin: '300px 0px', // Start preloading 300px before viewport
+        threshold: 0
+      });
+
+      workImages.forEach(img => preloadObserver.observe(img));
+    }
+  };
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCertificateImageLoading);
+  } else {
+    initCertificateImageLoading();
+  }
+
+  /**
    * Bootstrap tooltips (no jQuery)
    */
   if (window.bootstrap) {
