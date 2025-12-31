@@ -802,7 +802,7 @@ body.has-custom-cursor textarea {
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 10000000;
   transform: translate(-50%, -50%);
   transition: transform 0.1s ease;
   mix-blend-mode: difference;
@@ -818,7 +818,7 @@ body.has-custom-cursor textarea {
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: 9998;
+  z-index: 9999999;
   transform: translate(-50%, -50%);
   transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
   mix-blend-mode: difference;
