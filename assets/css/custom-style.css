@@ -10,6 +10,124 @@
   display: none !important;
 }
 
+/* ============================================
+   SCROLL-REVEAL ANIMATION SYSTEM
+   - GPU-accelerated (transform + opacity only)
+   - Respects prefers-reduced-motion
+   - Staggered delays via CSS custom properties
+   ============================================ */
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 
+    opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Faster reveal for title boxes */
+.title-box.scroll-reveal {
+  transform: translateY(12px);
+  transition-duration: 0.4s;
+}
+
+/* Subtle scale for cards on reveal */
+.work-box.scroll-reveal,
+.project-card.scroll-reveal,
+.service-box.scroll-reveal {
+  transform: translateY(24px) scale(0.98);
+}
+
+.work-box.scroll-reveal.is-revealed,
+.project-card.scroll-reveal.is-revealed,
+.service-box.scroll-reveal.is-revealed {
+  transform: translateY(0) scale(1);
+}
+
+/* Contact methods slide in from left */
+.contact-method.scroll-reveal {
+  transform: translateX(-16px);
+  transition-duration: 0.4s;
+}
+
+.contact-method.scroll-reveal.is-revealed {
+  transform: translateX(0);
+}
+
+/* Skill groups fade up faster */
+.skill-group.scroll-reveal {
+  transform: translateY(12px);
+  transition-duration: 0.35s;
+}
+
+/* ============================================
+   SKILL TAG HOVER MICRO-INTERACTIONS
+   - GPU-accelerated transforms
+   - Subtle scale and glow effect
+   ============================================ */
+.skill-group ul li {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  margin: 0.25rem;
+  background: rgba(0, 120, 255, 0.08);
+  border: 1px solid rgba(0, 120, 255, 0.2);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--text-color, #f5f5f5);
+  transition: 
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: default;
+}
+
+.skill-group ul li:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: rgba(0, 120, 255, 0.15);
+  border-color: rgba(0, 120, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 120, 255, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-group ul li {
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  
+  .skill-group ul li:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Clean up will-change after animation */
+.scroll-reveal.is-revealed {
+  will-change: auto;
+}
+
+/* ============================================
+   REDUCED MOTION: Disable all scroll animations
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+  
+  .scroll-reveal.is-revealed {
+    transform: none;
+  }
+}
+
 /* Responsive Hero Background - Mobile optimization */
 @media (max-width: 767px) {
   #hero.bg-image,
@@ -708,8 +826,23 @@ body.theme-dark #header .logo a {
   transition: color 0.6s ease;
 }
 
+/* Section title underline animation */
 .line-mf {
   background-color: #0078ff;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+}
+
+.title-box.scroll-reveal.is-revealed .line-mf {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line-mf {
+    transform: scaleX(1);
+    transition: none;
+  }
 }
 
 /* Blog/Projects Section */
@@ -928,20 +1061,6 @@ footer {
   
   .box-shadow-full {
     padding: 2rem 1rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .mobile-reveal {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 500ms ease, transform 500ms ease;
-    will-change: opacity, transform;
-  }
-
-  .mobile-reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 

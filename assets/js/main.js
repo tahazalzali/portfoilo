@@ -291,32 +291,96 @@
   initAOS();
 
   /**
-   * Mobile scroll-reveal to match desktop motion
+   * Scroll-reveal animations (desktop & mobile)
+   * - GPU-accelerated transforms only (translate, opacity)
+   * - Respects prefers-reduced-motion
+   * - Uses IntersectionObserver for efficiency
+   * - Staggered delays for certificate cards
    */
-  if (isMobile) {
-    const revealTargets = document.querySelectorAll(
-      '.box-shadow-full, .work-box, .project-card, .service-box, .title-box, .about-info, .about-me, .hero-title, .hero-subtitle, [data-aos]'
-    );
-    revealTargets.forEach(el => el.classList.add('mobile-reveal'));
-
-    if (!prefersReducedMotion && 'IntersectionObserver' in window) {
-      const observer = new IntersectionObserver(
-        (entries, obs) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              obs.unobserve(entry.target);
-            }
-          });
-        },
-        { rootMargin: '0px 0px -10% 0px', threshold: 0.1 }
-      );
-
-      revealTargets.forEach(el => observer.observe(el));
-    } else {
-      revealTargets.forEach(el => el.classList.add('is-visible'));
+  const initScrollReveal = () => {
+    // Skip all animations if reduced motion preferred
+    if (prefersReducedMotion) {
+      document.querySelectorAll('.scroll-reveal').forEach(el => {
+        el.classList.add('is-revealed');
+      });
+      return;
     }
-  }
+
+    // Guard: IntersectionObserver required
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.scroll-reveal').forEach(el => {
+        el.classList.add('is-revealed');
+      });
+      return;
+    }
+
+    // Select elements to reveal
+    const revealSelectors = [
+      '.box-shadow-full',
+      '.work-box',
+      '.project-card', 
+      '.service-box',
+      '.title-box',
+      '.about-info',
+      '.about-me',
+      '.contact-intro',
+      '.contact-card',
+      '.contact-method',
+      '.skill-group'
+    ];
+    
+    const revealTargets = document.querySelectorAll(revealSelectors.join(', '));
+    
+    // Add reveal class and calculate stagger delays for cards
+    revealTargets.forEach((el, index) => {
+      el.classList.add('scroll-reveal');
+      
+      // Stagger animation for certificate cards (work-box)
+      if (el.classList.contains('work-box')) {
+        const parent = el.closest('.row');
+        if (parent) {
+          const siblings = Array.from(parent.querySelectorAll('.work-box'));
+          const siblingIndex = siblings.indexOf(el);
+          // Max delay of 200ms to keep animations snappy
+          el.style.setProperty('--reveal-delay', `${Math.min(siblingIndex * 50, 200)}ms`);
+        }
+      }
+      
+      // Stagger for contact methods
+      if (el.classList.contains('contact-method')) {
+        const parent = el.closest('.contact-card');
+        if (parent) {
+          const siblings = Array.from(parent.querySelectorAll('.contact-method'));
+          const siblingIndex = siblings.indexOf(el);
+          el.style.setProperty('--reveal-delay', `${siblingIndex * 60}ms`);
+        }
+      }
+    });
+
+    // Create observer with performance-tuned settings
+    const revealObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Use requestAnimationFrame for smoother animation start
+            requestAnimationFrame(() => {
+              entry.target.classList.add('is-revealed');
+            });
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { 
+        rootMargin: '0px 0px -8% 0px', // Trigger slightly before fully in view
+        threshold: 0.15 
+      }
+    );
+
+    revealTargets.forEach(el => revealObserver.observe(el));
+  };
+
+  // Initialize scroll reveal
+  initScrollReveal();
 
   /**
    * Lazy Load Background Images
