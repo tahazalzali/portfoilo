@@ -601,32 +601,53 @@
 
     let mouseX = 0;
     let mouseY = 0;
-    let followerX = 0;
-    let followerY = 0;
-    let scale = 1;
+    let currentX = 0;
+    let currentY = 0;
     let hasMouseMoved = false;
     let cursorRafId = null;
+    let isHovering = false;
 
+    // Optimized lerp factor - slightly faster response
+    const lerpFactor = 0.18;
+
+    // Use passive event listener for better scroll performance
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      
       if (!hasMouseMoved) {
         hasMouseMoved = true;
-        followerX = mouseX;
-        followerY = mouseY;
+        currentX = mouseX;
+        currentY = mouseY;
         cursorFollower.style.opacity = '1';
         startCursorAnimation();
       }
     }, { passive: true });
 
+    // Click feedback
+    document.addEventListener('mousedown', () => {
+      cursorFollower.classList.add('is-active');
+    }, { passive: true });
+    
+    document.addEventListener('mouseup', () => {
+      cursorFollower.classList.remove('is-active');
+    }, { passive: true });
+
     function animateCursor() {
       if (cursorRafId === null) return;
       
-      // Smooth lerp movement
-      followerX += (mouseX - followerX) * 0.15;
-      followerY += (mouseY - followerY) * 0.15;
+      // Smooth interpolation with threshold to stop unnecessary updates
+      const dx = mouseX - currentX;
+      const dy = mouseY - currentY;
       
-      cursorFollower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%) scale(${scale})`;
+      // Only update if movement is significant (> 0.1px)
+      if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
+        currentX += dx * lerpFactor;
+        currentY += dy * lerpFactor;
+        
+        // Use transform for GPU-accelerated positioning
+        cursorFollower.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+      }
       
       cursorRafId = requestAnimationFrame(animateCursor);
     }
@@ -647,20 +668,35 @@
       startCursorAnimation();
     };
 
-    // Hover effects on interactive elements
-    const hoverElements = document.querySelectorAll('a, button, .work-box, .service-box, .card-blog, input, textarea');
-    hoverElements.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        scale = 1.5;
-        cursorFollower.style.backgroundColor = 'rgba(var(--cursor-color-rgb), 0.1)';
-        cursorFollower.style.borderColor = 'transparent';
-      });
-      el.addEventListener('mouseleave', () => {
-        scale = 1;
-        cursorFollower.style.backgroundColor = 'rgba(var(--cursor-color-rgb), 0.15)';
-        cursorFollower.style.borderColor = 'rgba(var(--cursor-color-rgb), 0.5)';
-      });
-    });
+    // Hover effects using event delegation for better performance
+    document.addEventListener('mouseover', (e) => {
+      const target = e.target.closest('a, button, .work-box, .service-box, .card-blog, .project-card, input, textarea, .nav-link, .portfolio-lightbox');
+      if (target && !isHovering) {
+        isHovering = true;
+        cursorFollower.classList.add('is-hovering');
+      }
+    }, { passive: true });
+
+    document.addEventListener('mouseout', (e) => {
+      const target = e.target.closest('a, button, .work-box, .service-box, .card-blog, .project-card, input, textarea, .nav-link, .portfolio-lightbox');
+      const relatedTarget = e.relatedTarget?.closest('a, button, .work-box, .service-box, .card-blog, .project-card, input, textarea, .nav-link, .portfolio-lightbox');
+      
+      if (target && !relatedTarget && isHovering) {
+        isHovering = false;
+        cursorFollower.classList.remove('is-hovering');
+      }
+    }, { passive: true });
+
+    // Hide cursor when leaving window
+    document.addEventListener('mouseleave', () => {
+      cursorFollower.style.opacity = '0';
+    }, { passive: true });
+
+    document.addEventListener('mouseenter', () => {
+      if (hasMouseMoved) {
+        cursorFollower.style.opacity = '1';
+      }
+    }, { passive: true });
   }
 
   // Old cursor code disabled below

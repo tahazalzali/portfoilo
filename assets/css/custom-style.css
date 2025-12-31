@@ -779,7 +779,7 @@ body.theme-dark #header .logo a {
   position: relative;
 }
 
-/* Custom Cursor */
+/* Custom Cursor - Base styles for hiding native cursor */
 body.has-custom-cursor {
   cursor: none;
 }
@@ -789,48 +789,12 @@ body.has-custom-cursor button,
 body.has-custom-cursor .work-box,
 body.has-custom-cursor .btn,
 body.has-custom-cursor input,
-body.has-custom-cursor textarea {
+body.has-custom-cursor textarea,
+body.has-custom-cursor .service-box,
+body.has-custom-cursor .card-blog,
+body.has-custom-cursor .project-card,
+body.has-custom-cursor .nav-link {
   cursor: none;
-}
-
-.cursor {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #0078ff;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 10000000;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease;
-  mix-blend-mode: difference;
-  will-change: transform;
-}
-
-.cursor2 {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid #0078ff;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9999999;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
-  mix-blend-mode: difference;
-  will-change: transform, width, height;
-}
-
-.cursor-hover {
-  width: 60px;
-  height: 60px;
-  background-color: rgba(0, 120, 255, 0.3);
-  border-color: transparent;
-  mix-blend-mode: normal;
 }
 
 /* Project Cards - Attractive UI/UX */
