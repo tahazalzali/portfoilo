@@ -173,7 +173,9 @@ img[loading="lazy"] {
 }
 
 /* Fix Logo and Mobile Toggle for Light Theme */
-#header .logo a {
+#header .logo a,
+body.theme-light #header .logo a,
+body.theme-dark #header .logo a {
   color: var(--navbar-link-color) !important;
   transition: color 0.3s ease;
 }
