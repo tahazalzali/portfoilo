@@ -10,6 +10,14 @@
   display: none !important;
 }
 
+/* Responsive Hero Background - Mobile optimization */
+@media (max-width: 767px) {
+  #hero.bg-image,
+  .hero.bg-image {
+    background-image: url(../img/work-5-mobile.jpg) !important;
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

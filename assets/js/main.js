@@ -594,7 +594,7 @@
     
     const cursorFollower = document.createElement('div');
     cursorFollower.classList.add('cursor-follower');
-    cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
+    cursorFollower.innerHTML = '<i class="bi bi-code-slash"></i>';
     cursorFollower.setAttribute('aria-hidden', 'true');
     cursorFollower.style.opacity = '0';
     document.body.appendChild(cursorFollower);
@@ -704,7 +704,7 @@
     document.body.classList.add('has-custom-cursor');
     const cursorFollower = document.createElement('div');
     cursorFollower.classList.add('cursor-follower');
-    cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
+    cursorFollower.innerHTML = '<i class="bi bi-code-slash"></i>';
     cursorFollower.setAttribute('aria-hidden', 'true');
     cursorFollower.style.opacity = '0';
     document.body.appendChild(cursorFollower);
