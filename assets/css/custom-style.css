@@ -188,6 +188,28 @@ img[loading="lazy"] {
   color: #fff !important;
 }
 
+/* Mobile Navigation Menu - Theme Compatible */
+.navbar-mobile {
+  background: rgba(0, 0, 0, 0.9) !important;
+}
+
+.navbar-mobile ul {
+  background-color: var(--card-bg) !important;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+}
+
+.navbar-mobile a {
+  color: var(--text-color) !important;
+  font-weight: 500;
+}
+
+.navbar-mobile a:hover, 
+.navbar-mobile .active, 
+.navbar-mobile li:hover > a {
+  color: #0078ff !important;
+}
+
 /* Fix Navbar Underline for Light Theme */
 .navbar > ul > li > a:before {
   background-color: var(--navbar-link-color) !important;
