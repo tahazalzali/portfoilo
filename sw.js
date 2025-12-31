@@ -1,4 +1,4 @@
-const CACHE_NAME = 'portfolio-v2'; // Update this version to force cache refresh
+const CACHE_NAME = 'portfolio-v3'; // Update this version to force cache refresh
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -14,7 +14,9 @@ const ASSETS_TO_CACHE = [
   '/assets/vendor/bootstrap/js/bootstrap.bundle.min.js',
   '/assets/vendor/glightbox/js/glightbox.min.js',
   '/assets/vendor/typed.js/typed.min.js',
-  '/assets/img/work-5.jpg'
+  '/assets/img/work-5.jpg',
+  '/media/tahaLogo.jpg',
+  '/tahalogo-noblue.png'
 ];
 
 // Install event - cache assets
@@ -43,40 +45,49 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event - serve from cache, fall back to network
+// Fetch event - Stale-While-Revalidate strategy for better UX
 self.addEventListener('fetch', event => {
   // Skip cross-origin requests
   if (!event.request.url.startsWith(self.location.origin)) {
     return;
   }
 
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
-      .then(response => {
-        // Return cached response if found
-        if (response) {
-          return response;
-        }
+      .then(cachedResponse => {
+        // Create a fetch promise to get fresh content
+        const fetchPromise = fetch(event.request)
+          .then(networkResponse => {
+            // Check if valid response
+            if (networkResponse && networkResponse.status === 200) {
+              // Clone response to cache it
+              const responseToCache = networkResponse.clone();
+              caches.open(CACHE_NAME)
+                .then(cache => {
+                  cache.put(event.request, responseToCache);
+                });
+            }
+            return networkResponse;
+          })
+          .catch(() => {
+            // Network failed, return cached version or offline fallback
+            return cachedResponse;
+          });
 
-        // Clone the request because it's a one-time use stream
-        const fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest).then(response => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-
-          // Clone response to cache it
-          const responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-
-          return response;
-        });
+        // Return cached response immediately, then update cache in background
+        return cachedResponse || fetchPromise;
       })
   );
+});
+
+// Handle service worker updates gracefully
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });

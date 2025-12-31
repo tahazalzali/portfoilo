@@ -125,6 +125,29 @@ html {
   }
 }
 
+/* Lazy-loaded background transition */
+.lazy-bg {
+  background-color: var(--bg-color);
+  transition: background-image 0.3s ease-in-out;
+}
+
+.lazy-bg.bg-loaded {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center center;
+}
+
+/* Image loading optimization */
+img {
+  content-visibility: auto;
+}
+
+img[loading="lazy"] {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
 /* Navbar Glassmorphism */
 #header {
   transition: all 0.5s;

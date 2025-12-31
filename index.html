@@ -76,9 +76,14 @@
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://pro.fontawesome.com" crossorigin>
+  
+  <!-- DNS Prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="dns-prefetch" href="https://unpkg.com">
 
   <!-- Preload hero background image for faster LCP -->
-  <link rel="preload" as="image" href="assets/img/work-5.jpg">
+  <link rel="preload" as="image" href="assets/img/work-5.jpg" fetchpriority="high">
 
   <!-- Favicons -->
   <link href="media/tahaLogo.jpg" rel="icon">
