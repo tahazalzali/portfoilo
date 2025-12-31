@@ -316,6 +316,9 @@ body.theme-dark #header .logo a {
   transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.6s ease, border-color 0.6s ease;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
+  /* Improve rendering performance */
+  will-change: transform;
+  contain: layout style;
 }
 
 .work-box:hover {
@@ -326,13 +329,45 @@ body.theme-dark #header .logo a {
 .work-img {
   background-color: #2a2a2a; /* Placeholder color while image loads */
   overflow: hidden; /* Ensure zoom effect stays inside */
+  /* Fixed aspect ratio to prevent layout shifts (CLS) */
+  aspect-ratio: 600 / 464;
+  position: relative;
+}
+
+/* Skeleton loading animation */
+.work-img::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  animation: skeleton-loading 1.5s infinite;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.work-img.loaded::before {
+  opacity: 0;
+}
+
+@keyframes skeleton-loading {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .work-img img {
-  transition: all 1s;
+  transition: transform 1s ease, opacity 0.3s ease;
   width: 100%; /* Ensure it fills the container */
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block; /* Remove bottom space */
+  /* Start with slightly reduced opacity for fade-in effect */
+  opacity: 0;
+}
+
+.work-img img.loaded {
+  opacity: 1;
 }
 
 .work-box:hover .work-img img {
