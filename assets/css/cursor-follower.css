@@ -2,6 +2,22 @@
 /*--------------------------------------------------------------
 # Cursor Follower
 --------------------------------------------------------------*/
+
+/* Hide native cursor when custom cursor is active - only on devices with fine pointer */
+@media (pointer: fine) and (hover: hover) {
+  .has-custom-cursor,
+  .has-custom-cursor * {
+    cursor: none !important;
+  }
+  
+  /* Restore cursor for inputs where text selection is needed */
+  .has-custom-cursor input,
+  .has-custom-cursor textarea,
+  .has-custom-cursor [contenteditable="true"] {
+    cursor: text !important;
+  }
+}
+
 .cursor-follower {
   position: fixed;
   top: 0;
