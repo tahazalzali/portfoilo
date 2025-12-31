@@ -336,6 +336,35 @@
   }
 
   /**
+   * Lazy Load Background Images
+   */
+  if ('IntersectionObserver' in window) {
+    const lazyBgObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const src = el.getAttribute('data-bg');
+          if (src) {
+            el.style.backgroundImage = `url(${src})`;
+            el.classList.add('bg-loaded');
+            observer.unobserve(el);
+          }
+        }
+      });
+    }, { rootMargin: '200px 0px' }); // Load 200px before viewport
+
+    document.querySelectorAll('.lazy-bg').forEach(el => lazyBgObserver.observe(el));
+  } else {
+    // Fallback for older browsers
+    document.querySelectorAll('.lazy-bg').forEach(el => {
+      const src = el.getAttribute('data-bg');
+      if (src) {
+        el.style.backgroundImage = `url(${src})`;
+      }
+    });
+  }
+
+  /**
    * Bootstrap tooltips (no jQuery)
    */
   if (window.bootstrap) {
@@ -838,6 +867,21 @@
         }
       });
     }
+  }
+
+  /**
+   * Service Worker Registration
+   */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('SW registered: ', registration);
+        })
+        .catch(registrationError => {
+          console.log('SW registration failed: ', registrationError);
+        });
+    });
   }
 
 })()
