@@ -586,7 +586,13 @@
   });
 
   /**
-   * Simple Cursor Follower - Safe version without particle canvas
+   * Cursor Follower with Optimized Particle Trail
+   * Performance safeguards:
+   * - Particle pool to avoid GC
+   * - Frame skipping during scroll
+   * - Limited particle count
+   * - Throttled particle spawning
+   * - Auto-pause when tab hidden
    */
   if (!prefersReducedMotion && hasFinePointer && !isMobile) {
     // Add class to hide native cursor
@@ -599,6 +605,29 @@
     cursorFollower.style.opacity = '0';
     document.body.appendChild(cursorFollower);
 
+    // Canvas for particle trail
+    const canvas = document.createElement('canvas');
+    canvas.id = 'cursor-canvas';
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d', { alpha: true });
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    // Debounced resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }, 150);
+    }, { passive: true });
+
     let mouseX = 0;
     let mouseY = 0;
     let currentX = 0;
@@ -606,11 +635,58 @@
     let hasMouseMoved = false;
     let cursorRafId = null;
     let isHovering = false;
+    let lastSpawnTime = 0;
+    const spawnInterval = 50; // ms between particle spawns
 
-    // Optimized lerp factor - slightly faster response
-    const lerpFactor = 0.18;
+    // Optimized lerp factor
+    const lerpFactor = 0.15;
 
-    // Use passive event listener for better scroll performance
+    // Particle pool for memory efficiency
+    const MAX_PARTICLES = 15;
+    const particlePool = [];
+    const activeParticles = [];
+
+    // Pre-create particle pool
+    for (let i = 0; i < MAX_PARTICLES; i++) {
+      particlePool.push({
+        x: 0, y: 0, size: 0, speedX: 0, speedY: 0, life: 0, decay: 0, active: false
+      });
+    }
+
+    const getParticle = () => {
+      for (let p of particlePool) {
+        if (!p.active) return p;
+      }
+      return null; // Pool exhausted
+    };
+
+    const spawnParticle = (x, y) => {
+      const p = getParticle();
+      if (!p) return;
+      
+      p.x = x;
+      p.y = y;
+      p.size = Math.random() * 2 + 1;
+      p.speedX = (Math.random() - 0.5) * 0.8;
+      p.speedY = (Math.random() - 0.5) * 0.8;
+      p.life = 1;
+      p.decay = Math.random() * 0.02 + 0.015;
+      p.active = true;
+      activeParticles.push(p);
+    };
+
+    // Cache CSS color to avoid getComputedStyle in animation loop
+    let cachedColor = '77, 163, 255';
+    const updateCachedColor = () => {
+      const style = getComputedStyle(document.body);
+      cachedColor = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
+    };
+    updateCachedColor();
+    
+    // Update color on theme change
+    const observer = new MutationObserver(() => updateCachedColor());
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
@@ -622,11 +698,22 @@
         cursorFollower.style.opacity = '1';
         startCursorAnimation();
       }
+      
+      // Throttled particle spawning
+      const now = performance.now();
+      if (!isScrolling && now - lastSpawnTime > spawnInterval) {
+        spawnParticle(mouseX, mouseY);
+        lastSpawnTime = now;
+      }
     }, { passive: true });
 
     // Click feedback
     document.addEventListener('mousedown', () => {
       cursorFollower.classList.add('is-active');
+      // Burst effect on click
+      for (let i = 0; i < 3; i++) {
+        spawnParticle(mouseX + (Math.random() - 0.5) * 10, mouseY + (Math.random() - 0.5) * 10);
+      }
     }, { passive: true });
     
     document.addEventListener('mouseup', () => {
@@ -636,17 +723,58 @@
     function animateCursor() {
       if (cursorRafId === null) return;
       
-      // Smooth interpolation with threshold to stop unnecessary updates
+      // Smooth cursor movement
       const dx = mouseX - currentX;
       const dy = mouseY - currentY;
       
-      // Only update if movement is significant (> 0.1px)
       if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
         currentX += dx * lerpFactor;
         currentY += dy * lerpFactor;
-        
-        // Use transform for GPU-accelerated positioning
         cursorFollower.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+      }
+      
+      // Particle rendering (skip during scroll for performance)
+      if (!isScrolling) {
+        ctx.clearRect(0, 0, width, height);
+        
+        // Update and draw particles
+        for (let i = activeParticles.length - 1; i >= 0; i--) {
+          const p = activeParticles[i];
+          
+          // Update
+          p.x += p.speedX;
+          p.y += p.speedY;
+          p.life -= p.decay;
+          if (p.size > 0.3) p.size -= 0.03;
+          
+          // Remove dead particles
+          if (p.life <= 0) {
+            p.active = false;
+            activeParticles.splice(i, 1);
+            continue;
+          }
+          
+          // Draw
+          ctx.fillStyle = `rgba(${cachedColor}, ${p.life * 0.6})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        
+        // Draw connecting lines (constellation effect) - only if few particles
+        if (activeParticles.length > 2 && activeParticles.length < 10) {
+          ctx.strokeStyle = `rgba(${cachedColor}, 0.08)`;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          for (const p of activeParticles) {
+            const dist = Math.hypot(p.x - currentX, p.y - currentY);
+            if (dist < 80) {
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(currentX, currentY);
+            }
+          }
+          ctx.stroke();
+        }
       }
       
       cursorRafId = requestAnimationFrame(animateCursor);
@@ -668,7 +796,7 @@
       startCursorAnimation();
     };
 
-    // Hover effects using event delegation for better performance
+    // Hover effects using event delegation
     document.addEventListener('mouseover', (e) => {
       const target = e.target.closest('a, button, .work-box, .service-box, .card-blog, .project-card, input, textarea, .nav-link, .portfolio-lightbox');
       if (target && !isHovering) {
@@ -690,11 +818,13 @@
     // Hide cursor when leaving window
     document.addEventListener('mouseleave', () => {
       cursorFollower.style.opacity = '0';
+      canvas.style.opacity = '0';
     }, { passive: true });
 
     document.addEventListener('mouseenter', () => {
       if (hasMouseMoved) {
         cursorFollower.style.opacity = '1';
+        canvas.style.opacity = '1';
       }
     }, { passive: true });
   }

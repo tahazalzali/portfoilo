@@ -81,6 +81,8 @@
   pointer-events: none;
   z-index: 9999998;
   contain: strict;
+  opacity: 1;
+  transition: opacity 0.2s ease-out;
 }
 
 #global-canvas {
