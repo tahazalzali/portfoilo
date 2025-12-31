@@ -507,11 +507,12 @@
     }
   });
 
-  if (false && !prefersReducedMotion && hasFinePointer) { // Disabled for performance
+  if (!prefersReducedMotion && hasFinePointer) {
     document.body.classList.add('has-custom-cursor');
     const cursorFollower = document.createElement('div');
     cursorFollower.classList.add('cursor-follower');
     cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
+    cursorFollower.setAttribute('aria-hidden', 'true');
     cursorFollower.style.opacity = '0';
     document.body.appendChild(cursorFollower);
 
@@ -551,17 +552,18 @@
         this.x = x;
         this.y = y;
         this.size = Math.random() * 2 + 1;
-        this.speedX = Math.random() * 2 - 1;
-        this.speedY = Math.random() * 2 - 1;
+        // Adjusted speed and decay for 60fps
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
         this.life = 1; // Opacity/Life
-        this.decay = Math.random() * 0.03 + 0.02;
+        this.decay = Math.random() * 0.015 + 0.01;
       }
       
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
         this.life -= this.decay;
-        if (this.size > 0.2) this.size -= 0.1;
+        if (this.size > 0.2) this.size -= 0.05; // Slower size decay for 60fps
       }
       
       draw() {
@@ -593,12 +595,8 @@
 
     function animateCursor(timestamp) {
       if (cursorRafId === null) return;
-      if (timestamp - lastCursorFrame < 1000 / 30) {
-        cursorRafId = requestAnimationFrame(animateCursor);
-        return;
-      }
-      lastCursorFrame = timestamp;
-
+      // Removed 30fps cap for smoother cursor movement (60fps+)
+      
       // Smooth lerp movement for the main cursor
       followerX += (mouseX - followerX) * 0.15;
       followerY += (mouseY - followerY) * 0.15;
