@@ -536,7 +536,83 @@
     }
   });
 
-  if (false && !prefersReducedMotion && hasFinePointer) { // Disabled - was causing rendering issues
+  /**
+   * Simple Cursor Follower - Safe version without particle canvas
+   */
+  if (!prefersReducedMotion && hasFinePointer && !isMobile) {
+    const cursorFollower = document.createElement('div');
+    cursorFollower.classList.add('cursor-follower');
+    cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
+    cursorFollower.setAttribute('aria-hidden', 'true');
+    cursorFollower.style.opacity = '0';
+    document.body.appendChild(cursorFollower);
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let followerX = 0;
+    let followerY = 0;
+    let scale = 1;
+    let hasMouseMoved = false;
+    let cursorRafId = null;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!hasMouseMoved) {
+        hasMouseMoved = true;
+        followerX = mouseX;
+        followerY = mouseY;
+        cursorFollower.style.opacity = '1';
+        startCursorAnimation();
+      }
+    }, { passive: true });
+
+    function animateCursor() {
+      if (cursorRafId === null) return;
+      
+      // Smooth lerp movement
+      followerX += (mouseX - followerX) * 0.15;
+      followerY += (mouseY - followerY) * 0.15;
+      
+      cursorFollower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%) scale(${scale})`;
+      
+      cursorRafId = requestAnimationFrame(animateCursor);
+    }
+
+    const startCursorAnimation = () => {
+      if (cursorRafId !== null) return;
+      cursorRafId = requestAnimationFrame(animateCursor);
+    };
+
+    pauseCursor = () => {
+      if (cursorRafId === null) return;
+      cancelAnimationFrame(cursorRafId);
+      cursorRafId = null;
+    };
+
+    resumeCursor = () => {
+      if (!hasMouseMoved) return;
+      startCursorAnimation();
+    };
+
+    // Hover effects on interactive elements
+    const hoverElements = document.querySelectorAll('a, button, .work-box, .service-box, .card-blog, input, textarea');
+    hoverElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        scale = 1.5;
+        cursorFollower.style.backgroundColor = 'rgba(var(--cursor-color-rgb), 0.1)';
+        cursorFollower.style.borderColor = 'transparent';
+      });
+      el.addEventListener('mouseleave', () => {
+        scale = 1;
+        cursorFollower.style.backgroundColor = 'rgba(var(--cursor-color-rgb), 0.15)';
+        cursorFollower.style.borderColor = 'rgba(var(--cursor-color-rgb), 0.5)';
+      });
+    });
+  }
+
+  // Old cursor code disabled below
+  if (false) { // Disabled - particle system was causing rendering issues
     document.body.classList.add('has-custom-cursor');
     const cursorFollower = document.createElement('div');
     cursorFollower.classList.add('cursor-follower');
