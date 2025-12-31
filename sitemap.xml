@@ -41,5 +41,13 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <!-- Humans.txt -->
+  <url>
+    <loc>https://www.zalzali.tech/humans.txt</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
   
 </urlset>
