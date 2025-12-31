@@ -609,12 +609,16 @@
     const canvas = document.createElement('canvas');
     canvas.id = 'cursor-canvas';
     document.body.appendChild(canvas);
-    const ctx = canvas.getContext('2d', { alpha: true });
+    const ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: false });
 
     let width = window.innerWidth;
     let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for performance
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.scale(dpr, dpr);
 
     // Debounced resize
     let resizeTimeout;
@@ -623,8 +627,11 @@
       resizeTimeout = setTimeout(() => {
         width = window.innerWidth;
         height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        ctx.scale(dpr, dpr);
       }, 150);
     }, { passive: true });
 
@@ -720,8 +727,22 @@
       cursorFollower.classList.remove('is-active');
     }, { passive: true });
 
-    function animateCursor() {
+    // Cached constants for animation loop
+    const TWO_PI = Math.PI * 2;
+    let lastFrameTime = 0;
+    const targetFPS = 60;
+    const frameInterval = 1000 / targetFPS;
+
+    function animateCursor(timestamp) {
       if (cursorRafId === null) return;
+      
+      // Frame rate limiting for consistent animation
+      const elapsed = timestamp - lastFrameTime;
+      if (elapsed < frameInterval * 0.8) {
+        cursorRafId = requestAnimationFrame(animateCursor);
+        return;
+      }
+      lastFrameTime = timestamp;
       
       // Smooth cursor movement
       const dx = mouseX - currentX;
@@ -734,8 +755,11 @@
       }
       
       // Particle rendering (skip during scroll for performance)
-      if (!isScrolling) {
+      if (!isScrolling && activeParticles.length > 0) {
         ctx.clearRect(0, 0, width, height);
+        
+        // Batch similar operations
+        ctx.fillStyle = `rgba(${cachedColor}, 0.6)`;
         
         // Update and draw particles
         for (let i = activeParticles.length - 1; i >= 0; i--) {
@@ -754,12 +778,15 @@
             continue;
           }
           
-          // Draw
-          ctx.fillStyle = `rgba(${cachedColor}, ${p.life * 0.6})`;
+          // Draw with individual opacity
+          ctx.globalAlpha = p.life * 0.6;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, p.size, 0, TWO_PI);
           ctx.fill();
         }
+        
+        // Reset alpha
+        ctx.globalAlpha = 1;
         
         // Draw connecting lines (constellation effect) - only if few particles
         if (activeParticles.length > 2 && activeParticles.length < 10) {
@@ -827,340 +854,6 @@
         canvas.style.opacity = '1';
       }
     }, { passive: true });
-  }
-
-  // Old cursor code disabled below
-  if (false) { // Disabled - particle system was causing rendering issues
-    document.body.classList.add('has-custom-cursor');
-    const cursorFollower = document.createElement('div');
-    cursorFollower.classList.add('cursor-follower');
-    cursorFollower.innerHTML = '<i class="bi bi-code-slash"></i>';
-    cursorFollower.setAttribute('aria-hidden', 'true');
-    cursorFollower.style.opacity = '0';
-    document.body.appendChild(cursorFollower);
-
-    // Canvas for particle trail
-    const canvas = document.createElement('canvas');
-    canvas.id = 'cursor-canvas';
-    document.body.appendChild(canvas);
-    const ctx = canvas.getContext('2d');
-
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    window.addEventListener('resize', () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    });
-
-    let mouseX = 0;
-    let mouseY = 0;
-    let followerX = 0;
-    let followerY = 0;
-    let scale = 1;
-    let hasMouseMoved = false;
-    let cursorRafId = null;
-    let lastCursorFrame = 0;
-
-    // Particle System
-    const particles = [];
-    const maxParticles = 20; // Limit for performance
-
-    class Particle {
-      constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.size = Math.random() * 2 + 1;
-        // Adjusted speed and decay for 60fps
-        this.speedX = Math.random() * 1 - 0.5;
-        this.speedY = Math.random() * 1 - 0.5;
-        this.life = 1; // Opacity/Life
-        this.decay = Math.random() * 0.015 + 0.01;
-      }
-      
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        this.life -= this.decay;
-        if (this.size > 0.2) this.size -= 0.05; // Slower size decay for 60fps
-      }
-      
-      draw() {
-        // Get color from CSS variable for theme support
-        const style = getComputedStyle(document.body);
-        const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
-        
-        ctx.fillStyle = `rgba(${color}, ${this.life})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      if (!hasMouseMoved) {
-        hasMouseMoved = true;
-        cursorFollower.style.opacity = '1';
-        startCursorAnimation();
-      }
-      
-      // Spawn particles on move
-      if (Math.random() > 0.5 && particles.length < maxParticles) {
-        particles.push(new Particle(mouseX, mouseY));
-      }
-    }, { passive: true });
-
-    function animateCursor(timestamp) {
-      if (cursorRafId === null) return;
-      // Removed 30fps cap for smoother cursor movement (60fps+)
-      
-      // Smooth lerp movement for the main cursor
-      followerX += (mouseX - followerX) * 0.15;
-      followerY += (mouseY - followerY) * 0.15;
-      
-      cursorFollower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%) scale(${scale})`;
-      
-      if (!isScrolling) {
-        // Canvas Render Loop
-        ctx.clearRect(0, 0, width, height);
-        
-        for (let i = 0; i < particles.length; i++) {
-          particles[i].update();
-          particles[i].draw();
-          
-          // Remove dead particles
-          if (particles[i].life <= 0) {
-            particles.splice(i, 1);
-            i--;
-          }
-        }
-        
-        // Draw connecting lines (Constellation effect)
-        // Only connect if close to cursor
-        const style = getComputedStyle(document.body);
-        const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
-        ctx.strokeStyle = `rgba(${color}, 0.1)`;
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        for (let i = 0; i < particles.length; i++) {
-          const dx = particles[i].x - followerX;
-          const dy = particles[i].y - followerY;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 100) {
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(followerX, followerY);
-          }
-        }
-        ctx.stroke();
-      }
-
-      cursorRafId = requestAnimationFrame(animateCursor);
-    }
-
-    const startCursorAnimation = () => {
-      if (cursorRafId !== null) return;
-      cursorRafId = requestAnimationFrame(animateCursor);
-    };
-
-    pauseCursor = () => {
-      if (cursorRafId === null) return;
-      cancelAnimationFrame(cursorRafId);
-      cursorRafId = null;
-    };
-
-    resumeCursor = () => {
-      if (!hasMouseMoved) return;
-      startCursorAnimation();
-    };
-
-    // Hover effects
-    const hoverElements = document.querySelectorAll('a, button, .work-box, .service-box, .card-blog, input, textarea');
-    hoverElements.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        scale = 1.5;
-        const style = getComputedStyle(document.body);
-        const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
-        cursorFollower.style.backgroundColor = `rgba(${color}, 0.1)`;
-        cursorFollower.style.borderColor = 'transparent';
-      });
-      el.addEventListener('mouseleave', () => {
-        scale = 1;
-        const style = getComputedStyle(document.body);
-        const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
-        cursorFollower.style.backgroundColor = `rgba(${color}, 0.15)`;
-        cursorFollower.style.borderColor = `rgba(${color}, 0.5)`;
-      });
-    });
-  }
-
-  /**
-   * Global Background Animation - Digital Rain
-   */
-  const bgCanvas = document.getElementById('global-canvas');
-  if (false && bgCanvas && !prefersReducedMotion && !isMobile) { // Disabled for performance
-    let bgWorker = null;
-
-    const updateWorkerConfig = () => {
-      if (!bgWorker) return;
-      const style = getComputedStyle(document.body);
-      const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
-      const isLight = document.body.classList.contains('theme-light');
-      bgWorker.postMessage({
-        type: 'config',
-        payload: {
-          isLight,
-          color
-        }
-      });
-    };
-
-    if ('OffscreenCanvas' in window) {
-      try {
-        const offscreen = bgCanvas.transferControlToOffscreen();
-        bgWorker = new Worker('assets/js/canvas-worker.js');
-        
-        bgWorker.postMessage({
-          type: 'init',
-          payload: {
-            canvas: offscreen,
-            width: window.innerWidth,
-            height: window.innerHeight
-          }
-        }, [offscreen]);
-
-        // Handle resizing
-        window.addEventListener('resize', () => {
-          bgWorker.postMessage({
-            type: 'resize',
-            payload: {
-              width: window.innerWidth,
-              height: window.innerHeight
-            }
-          });
-        });
-
-        // Handle theme changes
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            if (mutation.attributeName === 'class') {
-              updateWorkerConfig();
-            }
-          });
-        });
-        observer.observe(document.body, { attributes: true });
-        
-        // Initial config
-        updateWorkerConfig();
-
-        // Implement controls
-        pauseBg = () => bgWorker.postMessage({ type: 'pause' });
-        resumeBg = () => bgWorker.postMessage({ type: 'resume' });
-        setBgFps = (fps) => bgWorker.postMessage({ type: 'config', payload: { fps } });
-      } catch (e) {
-        console.warn('OffscreenCanvas failed, falling back to main thread', e);
-        // Fallback logic will be triggered if bgWorker is null? 
-        // No, the else block is for !('OffscreenCanvas' in window).
-        // We need to handle the fallback here too.
-        // For simplicity, if it fails, we just won't have the background animation or we can reload the page?
-        // Better to just let it fail gracefully and maybe try the fallback.
-        // But the fallback code is in the `else` block.
-        // I should restructure this to use a flag or function.
-      }
-
-    } else {
-      // Fallback for browsers without OffscreenCanvas support
-      const bgCtx = bgCanvas.getContext('2d');
-      let bgWidth = window.innerWidth;
-      let bgHeight = window.innerHeight;
-      let bgRafId = null;
-      let lastBgFrame = 0;
-      let fps = 30;
-      
-      bgCanvas.width = bgWidth;
-      bgCanvas.height = bgHeight;
-
-      const chars = '01<>/{}';
-      const fontSize = 14;
-      const columns = bgWidth / fontSize;
-      const drops = [];
-
-      for (let x = 0; x < columns; x++) {
-        drops[x] = 1;
-      }
-
-      function drawBg(timestamp) {
-        if (bgRafId === null) return;
-        
-        if (timestamp - lastBgFrame < 1000 / fps) {
-          bgRafId = requestAnimationFrame(drawBg);
-          return;
-        }
-        lastBgFrame = timestamp;
-        
-        const style = getComputedStyle(document.body);
-        const isLight = document.body.classList.contains('theme-light');
-        
-        if (isLight) {
-           bgCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-        } else {
-           bgCtx.fillStyle = 'rgba(17, 17, 17, 0.1)';
-        }
-        
-        bgCtx.fillRect(0, 0, bgWidth, bgHeight);
-
-        const color = style.getPropertyValue('--cursor-color-rgb').trim() || '77, 163, 255';
-        const opacity = isLight ? '0.8' : '0.4';
-        bgCtx.fillStyle = `rgba(${color}, ${opacity})`; 
-        bgCtx.font = fontSize + 'px monospace';
-
-        for (let i = 0; i < drops.length; i++) {
-          const text = chars.charAt(Math.floor(Math.random() * chars.length));
-          bgCtx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-          if (drops[i] * fontSize > bgHeight && Math.random() > 0.975) {
-            drops[i] = 0;
-          }
-          drops[i]++;
-        }
-        bgRafId = requestAnimationFrame(drawBg);
-      }
-
-      const startBgAnimation = () => {
-        if (bgRafId !== null) return;
-        bgRafId = requestAnimationFrame(drawBg);
-      };
-      
-      pauseBg = () => {
-        if (bgRafId === null) return;
-        cancelAnimationFrame(bgRafId);
-        bgRafId = null;
-      };
-      resumeBg = () => {
-        startBgAnimation();
-      };
-      setBgFps = (newFps) => { fps = newFps; };
-      
-      runWhenIdle(startBgAnimation, 2000);
-
-      window.addEventListener('resize', () => {
-        bgWidth = window.innerWidth;
-        bgHeight = window.innerHeight;
-        bgCanvas.width = bgWidth;
-        bgCanvas.height = bgHeight;
-        const newColumns = bgWidth / fontSize;
-        drops.length = 0;
-        for (let x = 0; x < newColumns; x++) {
-          drops[x] = 1;
-        }
-      });
-    }
   }
 
   /**
