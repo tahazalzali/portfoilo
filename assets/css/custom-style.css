@@ -159,6 +159,32 @@ html {
   color: #0078ff !important;
 }
 
+/* Fix Logo and Mobile Toggle for Light Theme */
+#header .logo a {
+  color: var(--navbar-link-color) !important;
+  transition: color 0.3s ease;
+}
+
+.mobile-nav-toggle {
+  color: var(--navbar-link-color) !important;
+  transition: color 0.3s ease;
+}
+
+/* Ensure mobile toggle is visible on dark overlay when menu is open */
+.navbar-mobile .mobile-nav-toggle {
+  color: #fff !important;
+}
+
+/* Fix Navbar Underline for Light Theme */
+.navbar > ul > li > a:before {
+  background-color: var(--navbar-link-color) !important;
+}
+
+.navbar .active:before, 
+.navbar li:hover > a:before {
+  background-color: #0078ff !important;
+}
+
 /* Preloader Dark Mode Override */
 #preloader {
   background: #111 !important; /* Match default dark theme */
