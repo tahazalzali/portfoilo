@@ -253,59 +253,42 @@
   }, 1200);
 
   /**
-   * Preloader
+   * Preloader - Remove immediately to show content fast
    */
   let preloader = select('#preloader');
   if (preloader) {
-    // Remove preloader on load or after a timeout (fallback for slow connections)
     const removePreloader = () => {
       if (preloader) {
-        preloader.style.opacity = '0';
-        preloader.style.transition = 'opacity 0.5s ease';
-        setTimeout(() => {
-          if (preloader) {
-            preloader.remove();
-            preloader = null; // Prevent multiple calls
-          }
-        }, 500);
+        preloader.remove();
+        preloader = null;
       }
     };
 
-    // Check if page is already loaded
-    if (document.readyState === 'complete') {
+    // Remove preloader as soon as DOM is ready
+    if (document.readyState !== 'loading') {
       removePreloader();
     } else {
-      window.addEventListener('load', removePreloader);
-      // Backup listener for DOMContentLoaded in case load event has issues
-      window.addEventListener('DOMContentLoaded', () => setTimeout(removePreloader, 1000));
+      document.addEventListener('DOMContentLoaded', removePreloader);
     }
     
-    // Fallback: If load takes too long (e.g. slow image), remove preloader anyway to show content
-    setTimeout(removePreloader, 2000); 
+    // Fallback: Remove after 500ms max
+    setTimeout(removePreloader, 500); 
   }
 
   /**
-   * Animation on scroll
+   * Animation on scroll - Disabled for instant content display
    */
   const initAOS = () => {
-    if (typeof AOS === 'undefined' || prefersReducedMotion || isMobile) {
-      return
-    }
-    AOS.init({
-      duration: 600,
-      easing: 'ease-in-out',
-      once: true,
-      mirror: false,
-      offset: 50,
-      disableMutationObserver: true
+    // Remove all data-aos attributes to show content immediately
+    document.querySelectorAll('[data-aos]').forEach(el => {
+      el.removeAttribute('data-aos');
+      el.removeAttribute('data-aos-delay');
+      el.removeAttribute('data-aos-duration');
     });
   };
   
-  if (document.readyState === 'complete') {
-    initAOS();
-  } else {
-    window.addEventListener('load', initAOS);
-  }
+  // Run immediately
+  initAOS();
 
   /**
    * Mobile scroll-reveal to match desktop motion
