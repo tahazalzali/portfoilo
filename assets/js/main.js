@@ -523,6 +523,9 @@
    * Simple Cursor Follower - Safe version without particle canvas
    */
   if (!prefersReducedMotion && hasFinePointer && !isMobile) {
+    // Add class to hide native cursor
+    document.body.classList.add('has-custom-cursor');
+    
     const cursorFollower = document.createElement('div');
     cursorFollower.classList.add('cursor-follower');
     cursorFollower.innerHTML = '<i class="fas fa-code"></i>';
