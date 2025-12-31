@@ -1,21 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  
+  <!-- Homepage - Taha Zalzali Senior Full Stack Engineer Portfolio -->
   <url>
     <loc>https://www.zalzali.tech/</loc>
-    <lastmod>2025-12-26</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.zalzali.tech/assets/img/work-5.jpg</image:loc>
+      <image:title>Taha Zalzali - Senior Full Stack Engineer</image:title>
+      <image:caption>Portfolio of Taha Zalzali, Senior Full Stack Engineer specializing in React, Next.js, Node.js, TypeScript</image:caption>
+    </image:image>
   </url>
+  
+  <!-- Main Index Page -->
   <url>
     <loc>https://www.zalzali.tech/index.html</loc>
-    <lastmod>2025-12-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
+  
+  <!-- Portfolio Details Page -->
   <url>
     <loc>https://www.zalzali.tech/portfolio-details.html</loc>
-    <lastmod>2025-12-26</lastmod>
+    <lastmod>2026-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- LLMs.txt for AI Discovery -->
+  <url>
+    <loc>https://www.zalzali.tech/llms.txt</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
 </urlset>

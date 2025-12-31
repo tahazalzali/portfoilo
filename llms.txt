@@ -1,0 +1,98 @@
+# Taha Zalzali - Senior Full Stack Engineer
+
+> Professional portfolio of Taha Zalzali, a Senior Full Stack Engineer with 5+ years of experience building high-performance web applications serving millions of users.
+
+## About Taha Zalzali
+
+Taha Zalzali is a Senior Full Stack Engineer specializing in modern web technologies. He has extensive experience architecting scalable full stack systems, RESTful & GraphQL APIs, and interactive user interfaces.
+
+### Contact Information
+- **Email**: tahazalzaly@gmail.com
+- **LinkedIn**: https://www.linkedin.com/in/taha-zalzali/
+- **GitHub**: https://github.com/tahazalzali
+- **Website**: https://www.zalzali.tech
+
+### Core Technical Skills
+
+**Frontend Technologies:**
+- React.js (Expert Level)
+- Next.js (Expert Level)
+- TypeScript (Expert Level)
+- JavaScript ES6+ (Expert Level)
+- Redux / Context API
+- React Query
+- Tailwind CSS
+- Styled Components
+- HTML5 & CSS3
+- Responsive Web Design
+- Web Accessibility (a11y)
+
+**Backend Technologies:**
+- Node.js (Expert Level)
+- Express.js
+- GraphQL
+- REST API Development
+- Serverless Functions
+
+**Database Technologies:**
+- PostgreSQL
+- MongoDB
+
+**Cloud & DevOps:**
+- AWS (S3, CloudFront, Lambda, API Gateway, VPC, SQS, SNS)
+- Docker
+- CI/CD Pipelines
+- DevOps Practices
+
+**UI/UX & Performance:**
+- Core Web Vitals Optimization
+- Figma to Code Implementation
+- Framer Motion Animations
+- Cross-Browser Testing
+
+### Professional Certifications
+
+1. **Meta Frontend Developer Professional Certificate** (September 2024)
+   - React, UX, State Management, Performance
+   - Credential: https://www.credly.com/badges/2d9b5238-e993-4dce-9530-096dc9fc2514/public_url
+
+2. **AWS Cloud Solutions Architect** (July 2024)
+   - VPC, API Gateway, Lambda, S3/CloudFront, SQS/SNS
+   - Credential: https://www.coursera.org/account/accomplishments/specialization/certificate/TEXZKJRUMH9U
+
+3. **IBM DevOps & Software Engineering** (May 2022)
+   - CI/CD, Containers, Monitoring, SRE Practices
+   - Credential: https://www.coursera.org/account/accomplishments/specialization/certificate/Y6HNVLMSUEF6
+
+4. **Back-End Development with .NET** (December 2025)
+   - .NET Core, C#, API Development, Microservices
+   - Credential: https://www.coursera.org/account/accomplishments/verify/FNGRL4J0AI1K
+
+5. **Front-End Web Development with React** (August 2021)
+   - Credential: https://www.coursera.org/account/accomplishments/certificate/XRXWFWNDVFS2
+
+### Experience Highlights
+
+- 5+ years of professional software engineering experience
+- Built applications serving millions of daily active users
+- Expertise in full software development lifecycle
+- Strong focus on code quality, clean architecture, and maintainability
+- Experience with both startup MVPs and enterprise-scale applications
+
+### Services Offered
+
+Taha Zalzali is available for:
+- Freelance web development projects
+- Full-time employment opportunities
+- Contract work
+- Technical consulting
+- MVP development for startups
+- Enterprise web application development
+
+### Keywords
+
+Senior Full Stack Engineer, Full Stack Developer, React Developer, React Expert, Next.js Developer, Node.js Developer, TypeScript Developer, JavaScript Expert, Frontend Developer, Backend Developer, Web Developer, Software Engineer, AWS Developer, Cloud Solutions Architect, UI/UX Engineer, Freelance Developer, Remote Developer, Tech Lead
+
+---
+
+For hiring inquiries, please contact: tahazalzaly@gmail.com

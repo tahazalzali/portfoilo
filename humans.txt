@@ -1,0 +1,28 @@
+/* TEAM */
+Name: Taha Zalzali
+Role: Senior Full Stack Engineer
+Site: https://www.zalzali.tech
+Email: tahazalzaly@gmail.com
+LinkedIn: https://www.linkedin.com/in/taha-zalzali/
+GitHub: https://github.com/tahazalzali
+Location: Remote / Worldwide
+
+/* SKILLS */
+Frontend: React, Next.js, TypeScript, JavaScript, Redux, React Query, Tailwind CSS
+Backend: Node.js, Express.js, GraphQL, REST APIs
+Database: PostgreSQL, MongoDB
+Cloud: AWS (S3, CloudFront, Lambda, API Gateway), Docker, CI/CD
+UI/UX: Responsive Design, Web Accessibility, Core Web Vitals, Figma
+
+/* CERTIFICATIONS */
+Meta Frontend Developer Professional Certificate
+AWS Cloud Solutions Architect
+IBM DevOps & Software Engineering
+Back-End Development with .NET
+
+/* SITE */
+Last update: 2026/01/01
+Language: English
+Standards: HTML5, CSS3, ES6+
+Components: Bootstrap, Swiper, GLightbox, Typed.js
+Software: Visual Studio Code

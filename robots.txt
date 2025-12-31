@@ -1,12 +1,69 @@
+# Robots.txt for Taha Zalzali Portfolio - www.zalzali.tech
+# Senior Full Stack Engineer | React, Next.js, Node.js Expert
+
+# Allow all search engine crawlers
 User-agent: *
 Allow: /
+Allow: /index.html
+Allow: /portfolio-details.html
+Allow: /llms.txt
 
-# Disallow admin or private directories if you have any
+# Allow specific AI crawlers for better AI search visibility
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+# Disallow static asset folders from indexing (not needed for search)
 Disallow: /assets/css/
 Disallow: /assets/js/
 Disallow: /assets/vendor/
 
-# Explicitly disallow the certificates folder to prevent indexing of PDF files
+# Explicitly disallow the certificates folder
 Disallow: /certificates/
 
+# Sitemap location
 Sitemap: https://www.zalzali.tech/sitemap.xml
+
+# Host directive
+Host: https://www.zalzali.tech

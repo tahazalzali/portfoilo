@@ -1,0 +1,48 @@
+{
+  "name": "Taha Zalzali - Senior Full Stack Engineer",
+  "short_name": "Taha Zalzali",
+  "description": "Senior Full Stack Engineer with 5+ years of experience. Expert in React, Next.js, Node.js, TypeScript, AWS. Building high-performance web applications serving millions of users.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0078ff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "/media/tahaLogo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/media/tahaLogo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["technology", "software", "web development", "portfolio"],
+  "keywords": [
+    "Taha Zalzali",
+    "Senior Full Stack Engineer",
+    "React Developer",
+    "Next.js Developer",
+    "Node.js Developer",
+    "TypeScript Developer",
+    "Full Stack Developer",
+    "Web Developer",
+    "Software Engineer",
+    "AWS Cloud Architect",
+    "Frontend Developer",
+    "Backend Developer"
+  ],
+  "author": {
+    "name": "Taha Zalzali",
+    "email": "tahazalzaly@gmail.com",
+    "url": "https://www.zalzali.tech"
+  },
+  "related_applications": [],
+  "prefer_related_applications": false
+}
