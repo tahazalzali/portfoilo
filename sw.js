@@ -1,4 +1,4 @@
-const CACHE_NAME = 'portfolio-v1'; // Update this version to force cache refresh
+const CACHE_NAME = 'portfolio-v2'; // Update this version to force cache refresh
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

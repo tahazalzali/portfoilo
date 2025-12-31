@@ -125,16 +125,6 @@ html {
   }
 }
 
-/* Performance helpers */
-.perf-section {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 900px;
-}
-
-.perf-section.perf-section--tall {
-  contain-intrinsic-size: 1px 1600px;
-}
-
 /* Navbar Glassmorphism */
 #header {
   transition: all 0.5s;
