@@ -536,7 +536,7 @@
     }
   });
 
-  if (!prefersReducedMotion && hasFinePointer) {
+  if (false && !prefersReducedMotion && hasFinePointer) { // Disabled - was causing rendering issues
     document.body.classList.add('has-custom-cursor');
     const cursorFollower = document.createElement('div');
     cursorFollower.classList.add('cursor-follower');

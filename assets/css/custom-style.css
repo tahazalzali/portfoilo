@@ -139,10 +139,6 @@ html {
 }
 
 /* Image loading optimization */
-img {
-  content-visibility: auto;
-}
-
 img[loading="lazy"] {
   opacity: 1;
   transition: opacity 0.3s ease-in-out;
