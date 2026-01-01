@@ -7,9 +7,6 @@
 (function() {
   "use strict";
 
-  // Enable JS-dependent styles immediately
-  document.documentElement.classList.add('js-enabled');
-
   /**
    * Easy selector helper function
    */
@@ -294,124 +291,47 @@
   initAOS();
 
   /**
-   * Scroll-reveal animations (desktop & mobile)
-   * - GPU-accelerated transforms only (translate, opacity)
-   * - Respects prefers-reduced-motion
-   * - Uses IntersectionObserver for efficiency
-   * - Staggered delays for certificate cards
+   * Subtle scroll-reveal: adds polish when scrolling, content always visible
    */
   const initScrollReveal = () => {
-    // Skip all animations if reduced motion preferred
-    if (prefersReducedMotion) {
-      document.querySelectorAll('.scroll-reveal').forEach(el => {
-        el.classList.add('is-revealed');
-      });
-      return;
-    }
+    // Skip if reduced motion or no IntersectionObserver
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) return;
 
-    // Guard: IntersectionObserver required
-    if (!('IntersectionObserver' in window)) {
-      document.querySelectorAll('.scroll-reveal').forEach(el => {
-        el.classList.add('is-revealed');
-      });
-      return;
-    }
-
-    // Select elements to reveal
-    const revealSelectors = [
-      '.box-shadow-full',
-      '.work-box',
-      '.project-card', 
-      '.service-box',
-      '.title-box',
-      '.about-info',
-      '.about-me',
-      '.contact-intro',
-      '.contact-card',
-      '.contact-method',
-      '.skill-group'
-    ];
+    // Only animate elements below the fold (not visible on load)
+    const revealSelectors = '.work-box, .project-card, .service-box, .contact-method';
+    const revealTargets = document.querySelectorAll(revealSelectors);
     
-    const revealTargets = document.querySelectorAll(revealSelectors.join(', '));
+    // Check if element is below the fold
+    const viewportHeight = window.innerHeight;
     
-    // Add reveal class and calculate stagger delays for cards
-    revealTargets.forEach((el, index) => {
-      el.classList.add('scroll-reveal');
-      
-      // Stagger animation for certificate cards (work-box)
-      if (el.classList.contains('work-box')) {
-        const parent = el.closest('.row');
-        if (parent) {
-          const siblings = Array.from(parent.querySelectorAll('.work-box'));
-          const siblingIndex = siblings.indexOf(el);
-          // Max delay of 200ms to keep animations snappy
-          el.style.setProperty('--reveal-delay', `${Math.min(siblingIndex * 50, 200)}ms`);
-        }
-      }
-      
-      // Stagger for contact methods
-      if (el.classList.contains('contact-method')) {
-        const parent = el.closest('.contact-card');
-        if (parent) {
-          const siblings = Array.from(parent.querySelectorAll('.contact-method'));
-          const siblingIndex = siblings.indexOf(el);
-          el.style.setProperty('--reveal-delay', `${siblingIndex * 60}ms`);
-        }
-      }
-    });
-
-    // Scroll-pause: defer animations during active scroll for 60fps
-    let isScrolling = false;
-    let scrollTimeout = null;
-    let pendingReveals = [];
-
-    const processPendingReveals = () => {
-      if (pendingReveals.length > 0) {
-        requestAnimationFrame(() => {
-          pendingReveals.forEach(el => el.classList.add('is-revealed'));
-          pendingReveals = [];
-        });
-      }
-    };
-
-    document.addEventListener('scroll', () => {
-      isScrolling = true;
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        isScrolling = false;
-        processPendingReveals();
-      }, 100); // 100ms debounce after scroll stops
-    }, { passive: true });
-
-    // Create observer with performance-tuned settings
     const revealObserver = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            if (isScrolling) {
-              // Queue for after scroll stops to prevent jank
-              pendingReveals.push(entry.target);
-            } else {
-              // Animate immediately when not scrolling
-              requestAnimationFrame(() => {
-                entry.target.classList.add('is-revealed');
-              });
-            }
+            entry.target.classList.add('scroll-reveal', 'is-revealed');
             obs.unobserve(entry.target);
           }
         });
       },
-      { 
-        rootMargin: '0px 0px -8% 0px', // Trigger slightly before fully in view
-        threshold: 0.15 
-      }
+      { threshold: 0.1 }
     );
 
-    revealTargets.forEach(el => revealObserver.observe(el));
+    revealTargets.forEach(el => {
+      // Only observe elements that start below the viewport
+      const rect = el.getBoundingClientRect();
+      if (rect.top > viewportHeight) {
+        el.classList.add('scroll-reveal');
+        revealObserver.observe(el);
+      }
+    });
   };
 
-  // Initialize scroll reveal
-  initScrollReveal();
+  // Initialize after DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollReveal);
+  } else {
+    initScrollReveal();
+  }
 
   /**
    * Lazy Load Background Images
