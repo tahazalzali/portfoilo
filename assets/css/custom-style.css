@@ -1061,3 +1061,64 @@ footer {
   }
 }
  
+/* ============================================
+   ACCESSIBILITY IMPROVEMENTS (WCAG 2.2)
+   ============================================ */
+
+/* 1. Enhanced Focus Indicators */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+.work-box a:focus-visible {
+  outline: 3px solid #0078ff !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 4px rgba(0, 120, 255, 0.3);
+  z-index: 10;
+  border-radius: 4px;
+}
+
+/* 2. Color Contrast Enhancements */
+:root {
+  /* Dark Theme: Lighter blue for better contrast against dark backgrounds */
+  --tech-tag-text: #8bc4ff; 
+}
+
+body.theme-light {
+  /* Light Theme: Darker blue for better contrast against light backgrounds */
+  --tech-tag-text: #003d80;
+}
+
+/* 3. Certificate Button Styling */
+.w-like {
+  float: right;
+  display: flex;
+  align-items: center;
+}
+
+.w-like .btn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Ensure links in text have sufficient contrast */
+a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover, a:focus {
+  text-decoration: underline;
+}
+
+/* Fix for light blue tags mentioned in review */
+.skill-group ul li {
+  color: var(--text-color); /* Ensure it uses the high-contrast text color */
+}
