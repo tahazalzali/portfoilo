@@ -7,6 +7,9 @@
 (function() {
   "use strict";
 
+  // Enable JS-dependent styles immediately
+  document.documentElement.classList.add('js-enabled');
+
   /**
    * Easy selector helper function
    */
@@ -357,15 +360,43 @@
       }
     });
 
+    // Scroll-pause: defer animations during active scroll for 60fps
+    let isScrolling = false;
+    let scrollTimeout = null;
+    let pendingReveals = [];
+
+    const processPendingReveals = () => {
+      if (pendingReveals.length > 0) {
+        requestAnimationFrame(() => {
+          pendingReveals.forEach(el => el.classList.add('is-revealed'));
+          pendingReveals = [];
+        });
+      }
+    };
+
+    document.addEventListener('scroll', () => {
+      isScrolling = true;
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        isScrolling = false;
+        processPendingReveals();
+      }, 100); // 100ms debounce after scroll stops
+    }, { passive: true });
+
     // Create observer with performance-tuned settings
     const revealObserver = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            // Use requestAnimationFrame for smoother animation start
-            requestAnimationFrame(() => {
-              entry.target.classList.add('is-revealed');
-            });
+            if (isScrolling) {
+              // Queue for after scroll stops to prevent jank
+              pendingReveals.push(entry.target);
+            } else {
+              // Animate immediately when not scrolling
+              requestAnimationFrame(() => {
+                entry.target.classList.add('is-revealed');
+              });
+            }
             obs.unobserve(entry.target);
           }
         });
