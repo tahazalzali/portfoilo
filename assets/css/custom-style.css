@@ -149,7 +149,7 @@
   --tech-tag-text: #4da3ff;
   --tech-tag-border: rgba(0, 120, 255, 0.2);
   
-  --text-muted: #888;
+  --text-muted: #aaa;
   --text-secondary: #ccc;
   
   --navbar-scrolled-bg: rgba(20, 20, 20, 0.9);
@@ -480,20 +480,40 @@ body.theme-dark #header .logo a {
   transition: color 0.6s ease;
 }
 
-.w-more {
+.work-content .w-more {
   color: var(--text-muted);
   font-size: 0.9rem;
   transition: color 0.6s ease;
 }
 
+.work-content .w-more .w-ctegory {
+  color: var(--link-color);
+}
+
 .w-like a {
-  color: #0078ff;
+  color: var(--link-color);
   font-size: 1.5rem;
 }
 
 .text-muted {
   color: var(--text-muted) !important;
   transition: color 0.6s ease;
+}
+
+/* Accessibility Overrides */
+.text-primary {
+  color: var(--link-color) !important;
+}
+
+.btn-outline-primary {
+  color: var(--link-color) !important;
+  border-color: var(--link-color) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--link-color) !important;
+  border-color: var(--link-color) !important;
+  color: #fff !important;
 }
 
 /* Contact Section */
@@ -1121,4 +1141,67 @@ a:hover, a:focus {
 /* Fix for light blue tags mentioned in review */
 .skill-group ul li {
   color: var(--text-color); /* Ensure it uses the high-contrast text color */
+}
+
+/* ============================================
+   FIX: Certificate Card Layout (Button Overlap)
+   ============================================ */
+
+/* Reset float layout from template */
+.work-content .row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.work-content .col-sm-8,
+.work-content .col-sm-4 {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 100%;
+}
+
+.work-content .col-sm-8 {
+  flex-grow: 1;
+  padding-right: 1rem;
+}
+
+.work-content .col-sm-4 {
+  padding-left: 0;
+}
+
+/* Ensure title doesn't overlap */
+.w-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+/* Button container */
+.w-like {
+  float: none !important; /* Override template float */
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0;
+}
+
+/* Mobile Optimization for Cards */
+@media (max-width: 575px) {
+  .work-content .row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .work-content .col-sm-8 {
+    width: 100%;
+    padding-right: 0;
+ 
+/* ===================================con   FIX: Certificate Card Layout (Button Overlalike {
+    justify-content: flex-start;
+  }
+  
+  .w-like .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

@@ -112,76 +112,20 @@ Using **two** icon font systems:
 
 ---
 
-## 🔧 Recommended Fixes
+## ✅ Completed Optimizations (January 1, 2026)
 
-### Priority 1: Critical Image Optimization
+### 1. Critical Image Optimization
+- **Compressed all certificate full-size images**: Reduced from ~2.6 MB to ~115 KB each.
+- **Optimized Hero Image**: Reduced `work-5.jpg` from 218 KB to 115 KB.
+- **Total savings**: ~7 MB reduction in page weight.
 
-#### A. Compress Full-Size Certificate Images
-```bash
-# Target: < 150 KB each
-# Current aws_certificate.jpg: 2.6 MB → Target: 150 KB (94% reduction)
+### 2. Accessibility Fixes
+- **Color Contrast**: Fixed insufficient contrast for text and buttons in dark mode (WCAG 2.2 AA compliance).
+- **Navigation**: Improved mobile navigation accessibility.
 
-# Recommended tools:
-# - Squoosh.app (web-based)
-# - ImageOptim (macOS)
-# - Sharp (Node.js)
+---
 
-# Example with ImageMagick:
-magick certificates/aws_certificate.jpg -resize 1200x -quality 75 certificates/aws_certificate_optimized.jpg
-```
-
-**Expected savings: ~7 MB → ~1.5 MB** (80% reduction)
-
-#### B. Convert to WebP Format
-```html
-<!-- Use picture element for modern format support -->
-<picture>
-  <source srcset="./certificates/aws_certificate.webp" type="image/webp">
-  <img src="./certificates/aws_certificate.jpg" alt="..." loading="lazy">
-</picture>
-```
-
-**Expected additional savings: 30-50%**
-
-#### C. Implement Responsive Images
-```html
-<img 
-  src="./certificates/thumbs/aws_certificate.jpg"
-  srcset="
-    ./certificates/thumbs/aws_certificate-400w.jpg 400w,
-    ./certificates/thumbs/aws_certificate-600w.jpg 600w"
-  sizes="(max-width: 768px) 400px, 600px"
-  loading="lazy"
-  decoding="async"
-  alt="AWS Certificate">
-```
-
-### Priority 2: Optimize Hero Image
-
-```bash
-# Current: 218 KB
-# Target: < 80 KB
-
-# Option 1: Compress existing
-magick assets/img/work-5.jpg -resize 1920x -quality 70 assets/img/work-5-optimized.jpg
-
-# Option 2: Create WebP version
-magick assets/img/work-5.jpg -resize 1920x -quality 75 assets/img/work-5.webp
-```
-
-Add responsive hero:
-```css
-/* In style.css */
-#hero {
-  background-image: url(assets/img/work-5-mobile.jpg); /* 50KB mobile version */
-}
-
-@media (min-width: 768px) {
-  #hero {
-    background-image: url(assets/img/work-5.jpg);
-  }
-}
-```
+## 🔧 Recommended Fixes (Remaining)
 
 ### Priority 3: Remove Unused Dependencies
 
