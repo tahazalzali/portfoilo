@@ -1,10 +1,10 @@
 # Taha Zalzali - Senior Full Stack Engineer
 
-> Professional portfolio of Taha Zalzali, a Senior Full Stack Engineer with 5+ years of experience building high-performance web applications serving millions of users.
+> Professional portfolio of Taha Zalzali, a Senior Full Stack Engineer with 5+ years of experience building high-performance web applications serving millions of users. Expert in React 19, Next.js 15, Node.js, TypeScript, and AI/LLM integration.
 
 ## About Taha Zalzali
 
-Taha Zalzali is a Senior Full Stack Engineer specializing in modern web technologies. He has extensive experience architecting scalable full stack systems, RESTful & GraphQL APIs, and interactive user interfaces.
+Taha Zalzali is a Senior Full Stack Engineer specializing in modern web technologies and AI integration. He has extensive experience architecting scalable full stack systems, RESTful & GraphQL APIs, and interactive user interfaces using the latest frameworks and tools.
 
 ### Contact Information
 - **Email**: tahazalzaly@gmail.com
@@ -14,41 +14,61 @@ Taha Zalzali is a Senior Full Stack Engineer specializing in modern web technolo
 
 ### Core Technical Skills
 
-**Frontend Technologies:**
-- React.js (Expert Level)
-- Next.js (Expert Level)
+**Frontend Technologies (2024-2026 Stack):**
+- React.js / React 19 (Expert Level)
+- React Server Components
+- Next.js 15 App Router (Expert Level)
 - TypeScript (Expert Level)
 - JavaScript ES6+ (Expert Level)
-- Redux / Context API
-- React Query
+- Zustand / Redux / Context API
+- TanStack Query (React Query)
 - Tailwind CSS
-- Styled Components
+- Styled Components / CSS Modules
+- Framer Motion
 - HTML5 & CSS3
 - Responsive Web Design
-- Web Accessibility (a11y)
+- Web Accessibility (a11y / WCAG)
 
 **Backend Technologies:**
 - Node.js (Expert Level)
-- Express.js
-- GraphQL
+- Express.js / Fastify
+- tRPC
+- GraphQL (Apollo, Relay)
 - REST API Development
-- Serverless Functions
+- Serverless Functions (AWS Lambda, Vercel Edge)
+- WebSockets / Real-time Applications
 
-**Database Technologies:**
+**Database & ORM:**
 - PostgreSQL
 - MongoDB
+- Prisma ORM
+- Drizzle ORM
+- Redis
 
 **Cloud & DevOps:**
-- AWS (S3, CloudFront, Lambda, API Gateway, VPC, SQS, SNS)
+- AWS (S3, CloudFront, Lambda, API Gateway, VPC, SQS, SNS, DynamoDB)
+- Vercel
+- Edge Computing
 - Docker
-- CI/CD Pipelines
-- DevOps Practices
+- Kubernetes
+- CI/CD Pipelines (GitHub Actions, GitLab CI)
+- Infrastructure as Code (Terraform)
+
+**AI & LLM Integration:**
+- OpenAI API Integration
+- Claude API / Anthropic
+- LangChain
+- AI-powered Features Development
+- RAG (Retrieval-Augmented Generation)
+- Vector Databases (Pinecone, Weaviate)
 
 **UI/UX & Performance:**
 - Core Web Vitals Optimization
+- SSR / ISR / SSG Strategies
 - Figma to Code Implementation
 - Framer Motion Animations
 - Cross-Browser Testing
+- Lighthouse Performance Audits
 
 ### Professional Certifications
 
@@ -78,20 +98,23 @@ Taha Zalzali is a Senior Full Stack Engineer specializing in modern web technolo
 - Expertise in full software development lifecycle
 - Strong focus on code quality, clean architecture, and maintainability
 - Experience with both startup MVPs and enterprise-scale applications
+- AI/LLM integration for modern web applications
 
 ### Services Offered
 
 Taha Zalzali is available for:
+- Full-time employment opportunities (Remote/Hybrid)
 - Freelance web development projects
-- Full-time employment opportunities
 - Contract work
 - Technical consulting
 - MVP development for startups
 - Enterprise web application development
+- AI-powered application development
+- Performance optimization & Core Web Vitals audits
 
 ### Keywords
 
-Senior Full Stack Engineer, Full Stack Developer, React Developer, React Expert, Next.js Developer, Node.js Developer, TypeScript Developer, JavaScript Expert, Frontend Developer, Backend Developer, Web Developer, Software Engineer, AWS Developer, Cloud Solutions Architect, UI/UX Engineer, Freelance Developer, Remote Developer, Tech Lead
+Senior Full Stack Engineer 2026, Full Stack Developer, React 19 Developer, React Expert, Next.js 15 Developer, Next.js App Router Expert, Node.js Developer, TypeScript Developer, JavaScript Expert, Frontend Developer, Backend Developer, Web Developer, Software Engineer, AWS Developer, Cloud Solutions Architect, AI Integration Developer, LLM Integration Expert, OpenAI API Developer, Vercel Expert, Edge Computing Developer, Serverless Developer, UI/UX Engineer, Freelance Developer, Remote Developer, Tech Lead, JAMstack Developer, tRPC Developer, Prisma Developer, Core Web Vitals Expert
 
 ---
 

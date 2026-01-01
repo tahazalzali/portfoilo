@@ -1,5 +1,6 @@
 # Robots.txt for Taha Zalzali Portfolio - www.zalzali.tech
 # Senior Full Stack Engineer | React, Next.js, Node.js Expert
+# Last Updated: 2026-01-01
 
 # Allow all search engine crawlers
 User-agent: *
@@ -7,23 +8,53 @@ Allow: /
 Allow: /index.html
 Allow: /portfolio-details.html
 Allow: /llms.txt
+Allow: /sitemap.xml
+Allow: /robots.txt
+Allow: /manifest.json
+Crawl-delay: 1
 
-# Allow specific AI crawlers for better AI search visibility
+# Google crawlers
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Storebot-Google
+Allow: /
+
+# Microsoft/Bing crawlers
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+User-agent: msnbot
+Allow: /
+
+User-agent: BingPreview
+Allow: /
+
+# OpenAI crawlers
 User-agent: GPTBot
 Allow: /
 
 User-agent: ChatGPT-User
 Allow: /
 
-User-agent: Google-Extended
+User-agent: OAI-SearchBot
 Allow: /
 
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
+# Anthropic/Claude crawlers
 User-agent: Anthropic-ai
 Allow: /
 
@@ -33,15 +64,39 @@ Allow: /
 User-agent: Claude-Web
 Allow: /
 
+# Other AI crawlers
 User-agent: PerplexityBot
 Allow: /
 
 User-agent: YouBot
 Allow: /
 
+User-agent: Cohere-ai
+Allow: /
+
+User-agent: AI2Bot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Apple
 User-agent: Applebot
 Allow: /
 
+User-agent: Applebot-Extended
+Allow: /
+
+# Social media crawlers
 User-agent: facebookexternalhit
 Allow: /
 
@@ -54,12 +109,34 @@ Allow: /
 User-agent: Slackbot
 Allow: /
 
+User-agent: TelegramBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+# SEO tools
+User-agent: AhrefsBot
+Allow: /
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Allow: /
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Allow: /
+Crawl-delay: 10
+
 # Disallow static asset folders from indexing (not needed for search)
 Disallow: /assets/css/
 Disallow: /assets/js/
 Disallow: /assets/vendor/
 
-# Explicitly disallow the certificates folder
+# Explicitly disallow the certificate images folder (thumbnails are enough)
 Disallow: /certificates/
 
 # Sitemap location
